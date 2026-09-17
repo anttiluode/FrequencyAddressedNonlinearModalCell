@@ -1,0 +1,179 @@
+# FrequencyAddressedNonlinearModalCell
+
+> **The field is not the hypothesis anymore. The field is the compressed representation of computational matter.**
+
+This repository asks one narrow question that emerged from the `NotSoSimpleNeuron`, `Entrain`, `InformationFlow`, `Saturday`, `Operaattori`, and `NSSN2` lines:
+
+> Can a rich stateful receiver be compressed into a much smaller dynamical cell that is still addressable by carrier frequency/phase and still preserves the nonlinear history effects that made the original receiver interesting?
+
+The goal is **not** to put a detailed biological dendrite into every artificial neuron. The biological/physical model is the mine. The desired product is a cheap reduced operator that could eventually be used as a trainable primitive at scale.
+
+## Why this is not another oscillator toy
+
+Earlier projects already established several boundaries:
+
+- `SpectralNeuron`: frequency-selective addressing is useful, but by itself it is ordinary FDM.
+- `Entrain`: Stuart-Landau resonators can route by entrainment and phase, with a measured Arnold-tongue resolution limit.
+- `InformationFlow`: space/frequency/phase can select a nonlinear write, but the useful coupling was explicitly supplied.
+- `NotSoSimpleNeuron`: a tuned point resonator beats a quasi-active cable on simple resonance, while the stronger residue is **state-conditioned cross-mode coupling and noncommuting event-order operators**.
+- `Operaattori`: complicated morphology can collapse to reusable transport/nonlinear operator objects, but its passive cable is not intrinsically an oscillator bank.
+- `NSSN2`: changing a resident machine is not enough; development must beat the frozen birth machine.
+
+This repo reverses the old field-computing direction. Instead of inventing a field and asking what it computes, it starts with richer computational matter and asks what **small field/operator description can be extracted without losing the computation**.
+
+## v0 — compress a resonant + active receiver
+
+The teacher is deliberately synthetic and transparent. It combines two mechanisms already isolated in `NotSoSimpleNeuron`:
+
+```text
+12-compartment passive cable
+        +
+quasi-active recovery state         -> non-zero resonant response
+        +
+local voltage-dependent conductance -> state-dependent nonlinear interaction
+```
+
+Each compartment therefore carries three state variables:
+
+```text
+voltage v_i
+recovery w_i
+conductance g_i
+```
+
+for a **36-state teacher**. Two distributed spatial ports receive signed carrier packets. Positive carrier half-cycles also deposit an excitatory conductance trace; local voltage controls how much of that trace becomes active current.
+
+This is a computational teacher, **not a claim about a fitted biological channel model**.
+
+The reduced cell uses an 8-dimensional POD/PCA coordinate system learned only from training trajectories. Three frozen competitors use exactly the same training probes:
+
+```text
+nonlinear_modal             rank-8 POD + quadratic state/input operator inference
+linear_modal                same rank-8 POD + linear dynamics
+random_projection_nonlinear rank-8 random coordinates + same quadratic library
+```
+
+The quadratic regression is intentionally ordinary reduced-order modelling: it is close in spirit to **Operator Inference** and **SINDy**, not a claimed new mathematical method.
+
+### Frozen training / test split
+
+Training:
+
+```text
+frequencies  0.18, 0.30, 0.42, 0.54 rad/step
+phases       0, pi/2
+ports        both
+plus three in-distribution two-tone interactions
+```
+
+Held out before fitting:
+
+```text
+frequencies  0.24, 0.36, 0.48 rad/step
+phases       pi/4, 3pi/4
+new two-tone combinations and relative phases
+A->B versus B->A packet order
+```
+
+The v0 pass condition was frozen before the result: the nonlinear modal surrogate had to beat the same-coordinate linear model by at least 15% on held-out single carriers, held-out pairs, and the order probe, while not losing the single-carrier test to the same-rank random-coordinate nonlinear attacker.
+
+## v0 result: FAIL
+
+Committed receipt: [`results/v0.json`](results/v0.json)
+
+The state itself is extremely compressible:
+
+```text
+rank-8 POD energy fraction     0.998602
+```
+
+And the nonlinear library really does improve the **one-step fit** in POD coordinates:
+
+| model | training one-step NRMSE |
+|---|---:|
+| nonlinear modal | **0.10428** |
+| linear modal | 0.19102 |
+| random nonlinear | **0.02816** |
+
+But that local fit does **not** survive autonomous rollout:
+
+| model | unseen single carriers | unseen tone pairs | A/B order-gap error |
+|---|---:|---:|---:|
+| nonlinear modal | 0.66566 | 0.54811 | 0.66584 |
+| **linear modal** | **0.10545** | **0.08203** | **0.13328** |
+| random nonlinear | 1.02463 | 0.97686 | 0.97628 |
+
+Verdict:
+
+```text
+FAIL_NONLINEAR_MODAL_COMPRESSION
+```
+
+The two-tone interaction residual is especially diagnostic. The teacher's nonlinear interaction is real but small in the current separated-port probe (`~1.10e-3` RMS). The linear model correctly predicts essentially none of that residual, yet remains far better on the total held-out trajectory. The naive quadratic reduced model overfits local transitions and compounds error when iterated.
+
+### What v0 killed
+
+It kills the easiest version of today's idea:
+
+> “If the rich receiver lives near a low-dimensional manifold, fit a polynomial law in those modal coordinates and you have the computational substance.”
+
+No. **Low-dimensional state geometry is weaker than a stable reduced computational law.**
+
+That distinction is exactly the `MatrixInMatrix` / algorithm-decoding warning in dynamical form: a compact representation of observed state is not automatically the mechanism that generates future state.
+
+### What survives
+
+The experiment is still useful because it cleanly separates three questions:
+
+1. **State compression:** yes — rank 8 captures 99.86% of sampled variance.
+2. **Local dynamic regression:** partially — quadratic features improve one-step prediction.
+3. **Autonomous causal reduction:** no — the fitted nonlinear law does not survive unseen rollout.
+
+The next gate therefore should not add more decorative frequencies. It should ask whether a **structure-preserving closure** can retain the teacher's local nonlinear interaction without destabilizing the reduced dynamics, and it should strengthen the interaction witness with overlapping-vs-separated controls before any large-network experiment is attempted.
+
+## Run it
+
+```bash
+python -m pip install -e '.[test]'
+pytest -q
+python -m frequency_modal_cell.experiment --output results/v0.json
+```
+
+The run is deterministic at seed 17.
+
+## Repository structure
+
+```text
+src/frequency_modal_cell/core.py        teacher + carrier packets + reduced models
+src/frequency_modal_cell/experiment.py  frozen v0 training/evaluation/receipt
+tests/                                  mechanism and receipt tests
+results/v0.json                         committed deterministic result
+docs/superpowers/specs/                 frozen design
+```
+
+## Prior-art fence
+
+Nothing here establishes a new Lagrangian law or a new reduced-order method.
+
+Relevant established machinery includes:
+
+- Brunton, Proctor & Kutz (2016), **Sparse Identification of Nonlinear Dynamics (SINDy)** — sparse regression over nonlinear candidate functions to identify dynamical laws.
+- Peherstorfer & Willcox (2016), **Data-driven operator inference for nonintrusive projection-based model reduction** — infer reduced polynomial operators from high-dimensional trajectories without requiring the full operators.
+- POD / projection-based model reduction generally — compress high-dimensional trajectory families into a low-dimensional coordinate system before learning or projecting dynamics.
+
+The narrower research question here is whether those ordinary reduction ideas can extract a **cheap frequency-addressed state-conditioned computational primitive** from the particular resident-matter mechanisms isolated in this repository lineage.
+
+## Claim boundary
+
+This repository does **not** establish that:
+
+- real dendrites are frequency-addressed modal computers;
+- a Lagrangian or Hamiltonian is the unique right representation;
+- the reduced coordinates are physically unique;
+- frequency channels are better than ordinary vector communication;
+- the current reduced cell beats GRUs, state-space models, attention, or transformers;
+- the v0 nonlinear surrogate works — it explicitly fails its frozen gate.
+
+The live question is smaller:
+
+> **What is the cheapest stable dynamical object that preserves the useful computation of a richer receiving substrate?**
