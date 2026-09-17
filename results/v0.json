@@ -1,0 +1,93 @@
+{
+  "experiment": "v0_frequency_addressed_reduction",
+  "seed": 17,
+  "teacher": {
+    "name": "resonant_active_cable",
+    "compartments": 12,
+    "state_dim": 36,
+    "ports": 2,
+    "provenance": "NotSoSimpleNeuron quasi-active frequency gate + synthetic local active interaction"
+  },
+  "training": {
+    "steps_per_probe": 192,
+    "frequencies_rad_per_step": [
+      0.18,
+      0.3,
+      0.42,
+      0.54
+    ],
+    "phases_rad": [
+      0.0,
+      1.5707963267948966
+    ],
+    "probe_count": 19,
+    "pod_energy_fraction_rank8": 0.9986017734261289
+  },
+  "models": {
+    "nonlinear_modal": {
+      "state_dim": 8,
+      "basis": "pod",
+      "nonlinear": true,
+      "parameter_count": 504
+    },
+    "linear_modal": {
+      "state_dim": 8,
+      "basis": "pod",
+      "nonlinear": false,
+      "parameter_count": 88
+    },
+    "random_projection_nonlinear": {
+      "state_dim": 8,
+      "basis": "random",
+      "nonlinear": true,
+      "parameter_count": 504
+    }
+  },
+  "metrics": {
+    "training_one_step": {
+      "nonlinear_modal": 0.10428002132485273,
+      "linear_modal": 0.19101959606094357,
+      "random_projection_nonlinear": 0.02816384179679301
+    },
+    "heldout_single": {
+      "nonlinear_modal": 0.6656609143038609,
+      "linear_modal": 0.10544641622862151,
+      "random_projection_nonlinear": 1.024633570441412
+    },
+    "heldout_pair": {
+      "nonlinear_modal": 0.5481132518807006,
+      "linear_modal": 0.08203029520264335,
+      "random_projection_nonlinear": 0.9768633701074966
+    },
+    "interaction": {
+      "teacher_interaction_rms": 0.001096654559351632,
+      "model_nrmse": {
+        "nonlinear_modal": 100.24240476911112,
+        "linear_modal": 0.9999999990881288,
+        "random_projection_nonlinear": 41.339402037738495
+      }
+    },
+    "order": {
+      "teacher_gap_rms": 0.14035111241454018,
+      "model_gap_rms": {
+        "nonlinear_modal": 0.17093020457737576,
+        "linear_modal": 0.14023408045116076,
+        "random_projection_nonlinear": 0.03633081811943162
+      },
+      "model_nrmse": {
+        "nonlinear_modal": 0.6658389489095289,
+        "linear_modal": 0.13327656247508327,
+        "random_projection_nonlinear": 0.9762761177493527
+      }
+    }
+  },
+  "gate": {
+    "single_vs_linear_15pct": false,
+    "pair_vs_linear_15pct": false,
+    "order_vs_linear_15pct": false,
+    "single_vs_random": true,
+    "finite_local_model": true
+  },
+  "verdict": "FAIL_NONLINEAR_MODAL_COMPRESSION",
+  "claim_boundary": "This tests local reduced-order fidelity inside one synthetic teacher family. It is not evidence of a biological Lagrangian, unique morphology advantage, or superiority to trained RNN/transformer architectures."
+}

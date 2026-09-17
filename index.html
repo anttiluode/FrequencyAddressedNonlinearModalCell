@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Frequency-Addressed Nonlinear Modal Cell</title>
+<style>
+body{font:16px system-ui;max-width:1000px;margin:auto;padding:28px;background:#111;color:#eee}h1{font-size:2.2rem}code,pre{background:#1c1c1c;padding:.2rem .4rem;border-radius:6px}pre{padding:16px;overflow:auto}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.card{background:#1b1b1b;padding:16px;border-radius:12px}.big{font-size:1.6rem;font-weight:700}.fail{color:#ff9a9a}.good{color:#a8e6a3}small{color:#aaa}a{color:#9dc6ff}
+</style>
+</head><body>
+<h1>Frequency-Addressed Nonlinear Modal Cell</h1>
+<p><strong>The field is not the hypothesis anymore. The field is the compressed representation of computational matter.</strong></p>
+<pre>36-state resonant + active teacher
+              ↓ trajectories
+         rank-8 POD
+          ↙        ↘
+     linear       quadratic
+          \        /
+       unseen carriers
+       pairs + order</pre>
+<div id="cards" class="grid"><div class="card">Loading committed receipt…</div></div>
+<h2>v0 question</h2><p>Does low-dimensional state imply a stable low-dimensional nonlinear computational law?</p>
+<p>v0 is frozen. A scientific failure remains a result.</p>
+<script>
+fetch('results/v0.json').then(r=>r.json()).then(d=>{
+ const m=d.metrics, cards=[
+ ['Verdict',d.verdict,d.verdict.startsWith('PASS')?'good':'fail'],
+ ['Rank-8 state energy',(100*d.training.pod_energy_fraction_rank8).toFixed(3)+'%','good'],
+ ['Nonlinear one-step',m.training_one_step.nonlinear_modal.toFixed(3),'good'],
+ ['Linear one-step',m.training_one_step.linear_modal.toFixed(3),''],
+ ['Nonlinear held-out',m.heldout_single.nonlinear_modal.toFixed(3),'fail'],
+ ['Linear held-out',m.heldout_single.linear_modal.toFixed(3),'good']];
+ document.getElementById('cards').innerHTML=cards.map(x=>`<div class="card"><small>${x[0]}</small><div class="big ${x[2]}">${x[1]}</div></div>`).join('');
+}).catch(e=>document.getElementById('cards').textContent='Receipt unavailable: '+e);
+</script>
+</body></html>
