@@ -67,6 +67,24 @@ The only residue allowed to survive is **context-dependent timing**: in v1, near
 
 This is intentionally a reduction test, not a performance benchmark. Even if fixed delays fail under ephaptic coupling, a richer conventional graph with activity-dependent delays could emulate the effect. The question is simply **which pieces of the physical story survive abstraction**.
 
+Frozen v2 receipt: [`results/v2_fixed_delay_attacker.json`](results/v2_fixed_delay_attacker.json)
+
+| attacker test | error |
+|---|---:|
+| frozen graph vs uncoupled grown arbor | **0.000000** max arrival error |
+| frozen graph vs near synchronous ephaptic bundle | **0.40235** step RMS |
+| same mismatch expressed as phase at ω=0.42 | **0.16899 rad RMS** |
+| far-separated axons | **0.00801** step RMS |
+| nearby but temporally staggered axons | **0.00044** step RMS |
+
+Verdict:
+
+```text
+PASS_FIXED_DELAY_BOUNDARY
+```
+
+The result deliberately kills part of the stronger story. **A frozen branching axon is computationally equivalent, for arrival timing, to a sparse graph with fixed edge delays.** The physical arbor becomes interesting only when some property of the transmitting matter remains runtime-dependent. In the current synthetic model that residue is the weak local coactivity-dependent timing perturbation. A conventional network with activity-dependent delays could represent that too, so v2 establishes a decomposition boundary rather than irreducibility.
+
 
 ## v0 — compress a resonant + active receiver
 
