@@ -64,3 +64,22 @@ v3 wraps a hidden FANMC population behind eight stimulation/recording ports. The
 `PASS_BLACK_BOX_STIMULATION_LANGUAGE`
 
 This earns an interface result, not an architecture victory. Slow hidden state is necessary for persistent FANMC writes; frequency is a real one-port address coordinate in this task; but space is easier and a boring linear state-space reservoir nearly matches the full codebook.
+
+
+# v4 receipt — 12 probes are already enough; active only widens the code
+
+v4 expands the candidate language to 96 writes, asks for six code symbols, and gives every budgeted strategy only 12 calibration interventions.
+
+Across hidden worlds 4, 9 and 14:
+
+- active accuracy median: **1.000**
+- fixed stimulus-cover accuracy median: **1.000**
+- random accuracy median: **1.000**
+- exhaustive 96-probe oracle accuracy median: **1.000**
+- active minimum pair distance median: **0.001040**
+- random minimum pair distance median: **0.000483**
+- fixed-cover minimum pair distance median: **0.000387**
+
+`FAIL_BUDGETED_LANGUAGE_DISCOVERY`
+
+The failure is informative: the current six-symbol task saturates too easily for accuracy to demonstrate active probe efficiency. Response adaptation does find a wider codebook—about 2.15x the minimum separation of random—but that margin has not yet earned functional value. The next test must spend that margin under drift/noise rather than lower the budget post hoc until active wins.
