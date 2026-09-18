@@ -38,6 +38,21 @@ def _candidate_actions() -> list[StimulusAction]:
     ]
 
 
+def _spatial_only_actions() -> list[StimulusAction]:
+    return [
+        StimulusAction(electrode=e, omega=0.30, phase=0.0, amplitude=0.12, duration=72)
+        for e in range(8)
+    ]
+
+
+def _frequency_phase_only_actions() -> list[StimulusAction]:
+    return [
+        StimulusAction(electrode=0, omega=omega, phase=phase, amplitude=0.12, duration=72)
+        for omega in (0.18, 0.30, 0.42, 0.54)
+        for phase in (0.0, np.pi / 2.0)
+    ]
+
+
 def _run_arm(name: str, matter, candidates, *, wait_steps: int, probe: StimulusAction, seed: int) -> dict:
     codebook = learn_stimulation_codebook(
         matter,
@@ -90,6 +105,22 @@ def run_v3(seed: int = 31, wait_steps: int = 96) -> dict:
         probe=probe,
         seed=seed + 2,
     )
+    spatial_only = _run_arm(
+        "fanmc_spatial_only",
+        VirtualOrganoid(seed=4),
+        _spatial_only_actions(),
+        wait_steps=wait_steps,
+        probe=probe,
+        seed=seed + 3,
+    )
+    frequency_only = _run_arm(
+        "fanmc_frequency_phase_only",
+        VirtualOrganoid(seed=4),
+        _frequency_phase_only_actions(),
+        wait_steps=wait_steps,
+        probe=probe,
+        seed=seed + 4,
+    )
 
     fanmc_acc = fanmc["metrics"]["accuracy"]
     fast_acc = fast["metrics"]["accuracy"]
@@ -132,12 +163,24 @@ def run_v3(seed: int = 31, wait_steps: int = 96) -> dict:
             "fanmc_hidden_matter": fanmc,
             "same_fast_matter_no_slow_write": fast,
             "linear_state_space_reservoir": linear,
+            "fanmc_spatial_only": spatial_only,
+            "fanmc_frequency_phase_only": frequency_only,
         },
         "gate": gate,
         "verdict": "PASS_BLACK_BOX_STIMULATION_LANGUAGE" if all(gate.values()) else "FAIL_BLACK_BOX_STIMULATION_LANGUAGE",
+        "address_ablation": {
+            "full_accuracy": fanmc["metrics"]["accuracy"],
+            "spatial_only_accuracy": spatial_only["metrics"]["accuracy"],
+            "frequency_phase_only_accuracy": frequency_only["metrics"]["accuracy"],
+            "interpretation": (
+                "These arms test whether the discovered four-symbol language actually needs frequency/phase, "
+                "or whether electrode identity alone explains the result."
+            ),
+        },
         "attacker_note": (
             "The linear state-space reservoir uses the identical black-box eight-port interface. "
-            "If it matches FANMC, v3 establishes the interface and persistent-address mechanism, not a FANMC advantage."
+            "If it matches FANMC, v3 establishes the interface and persistent-address mechanism, not a FANMC advantage. "
+            "Spatial-only and frequency/phase-only candidate sets separately attack the claim that frequency is required."
         ),
         "claim_boundary": (
             "This is a synthetic virtual-organoid task inspired by wetware-computing interfaces. "
