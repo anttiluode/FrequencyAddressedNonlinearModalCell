@@ -372,6 +372,50 @@ Don't train the internals directly.
 Learn a language for talking to the matter.
 ```
 
+### v3 result: PASS — with two important attackers surviving
+
+Frozen receipt: [`results/v3_virtual_organoid.json`](results/v3_virtual_organoid.json)
+
+After one black-box calibration sweep over 64 candidate stimulations, the controller selects four write symbols. Each write is followed by a **96-step silent interval**, then the same common probe. Held-out trials perturb frequency by 1%, phase by 0.08 rad, amplitude by 4%, and add recording noise.
+
+| arm | four-symbol held-out accuracy |
+|---|---:|
+| full FANMC hidden matter | **100.00%** |
+| same fast matter, slow write removed | **18.75%** |
+| linear state-space reservoir, same interface | **97.92%** |
+| FANMC spatial address only | **100.00%** |
+| FANMC frequency + phase only, one electrode | **91.67%** |
+| FANMC frequency only, one electrode, fixed phase | **81.25%** |
+| FANMC phase only, one electrode, fixed frequency | **27.08%** |
+
+The full FANMC write leaves a maximum post-wait signature displacement of **0.006396** from the unwritten baseline. Removing the slow material write reduces that to **2.86e-6**, and decoding falls below the four-class chance level of 25%. So the persistent write/read part is genuinely carried by the slow hidden state in this synthetic substrate.
+
+But two stronger stories are killed immediately.
+
+First, **FANMC has not beaten ordinary reservoir memory**: the 48-state linear state-space attacker reaches 97.92% through the identical external interface.
+
+Second, **frequency is not necessary for this task**: spatial addressing alone is perfect. What frequency *does* earn is narrower and still useful: with the physical electrode fixed, four distinct frequencies alone support **81.25%** decoding after the long wait and held-out jitter, while phase alone is near chance. In this gate, frequency is therefore a real non-spatial address coordinate, not the dominant or uniquely necessary one.
+
+```text
+what survived:
+    black-box stimulation can discover a persistent external code
+    slow hidden state is necessary for the FANMC persistence
+    frequency alone can address different persistent states through one port
+
+what did not survive:
+    FANMC superiority over an ordinary state-space reservoir
+    frequency as necessary for the easiest four-symbol task
+    phase alone as a reliable four-symbol address
+```
+
+Verdict:
+
+```text
+PASS_BLACK_BOX_STIMULATION_LANGUAGE
+```
+
+The next serious gate should therefore stop asking merely whether a code exists. It should ask whether **active experiment selection can discover a useful code with fewer interventions**, and whether a learned code transfers when the hidden substrate drifts or when several writes must coexist without destroying one another.
+
 ### v3 claim boundary
 
 The virtual organoid is synthetic. It does not reproduce the cellular composition, plasticity, electrophysiology, or non-stationarity of a real forebrain organoid. The slow material variable is deliberately simple and exists only to test persistent write/read behavior. The eight-electrode interface and stimulation-codebook procedure are inspired by the experimental constraint in Jordan et al.; they are not claimed as a biological model.
