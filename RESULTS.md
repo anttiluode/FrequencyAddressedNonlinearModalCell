@@ -83,3 +83,21 @@ Across hidden worlds 4, 9 and 14:
 `FAIL_BUDGETED_LANGUAGE_DISCOVERY`
 
 The failure is informative: the current six-symbol task saturates too easily for accuracy to demonstrate active probe efficiency. Response adaptation does find a wider codebook—about 2.15x the minimum separation of random—but that margin has not yet earned functional value. The next test must spend that margin under drift/noise rather than lower the budget post hoc until active wins.
+
+
+# v5 receipt — wide code loses; relative coordinates survive
+
+v5 reuses the six-symbol v4 language after frozen geometry and recurrent-dynamics drift.
+
+Median results across three hidden worlds:
+
+- baseline active/random: **1.000 / 1.000**
+- geometry drift zero-shot: **0.1667 / 0.1667**
+- recurrent-gain drift zero-shot: **1.000 / 1.000**
+- combined drift zero-shot: **0.1667 / 0.1667**
+- two-code-anchor recalibration: **1.000 / 1.000**
+- one unwritten-baseline recenter: **1.000 / 1.000** for geometry and combined drift
+
+`FAIL_WIDE_CODE_DRIFT_VALUE`
+
+The wider active code from v4 does not earn functional value under these drifts. The stronger result is an attacker: geometry drift mostly changes the absolute response origin. Re-expressing each stored code as a displacement from the current unwritten baseline restores the old language without replaying any symbol. In this synthetic family, observer-frame correction is cheaper than code re-identification.

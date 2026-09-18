@@ -26,3 +26,5 @@ jobs:
       - run: python -c "import json; a=json.load(open('results/v3_virtual_organoid.json')); b=json.load(open('results/ci-v3.json')); assert a == b"
       - run: python -m frequency_modal_cell.active_language_experiment --output results/ci-v4.json
       - run: python -c "import json; a=json.load(open('results/v4_budgeted_language.json')); b=json.load(open('results/ci-v4.json')); assert a == b"
+      - run: python -m frequency_modal_cell.drift_experiment --output results/ci-v5.json
+      - run: python -c "import json; a=json.load(open('results/v5_drift.json')); b=json.load(open('results/ci-v5.json')); assert a == b"
