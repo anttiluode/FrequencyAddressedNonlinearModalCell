@@ -45,3 +45,22 @@ When weak ephaptic timing is enabled for nearby synchronous axons, the fixed-del
 `PASS_FIXED_DELAY_BOUNDARY`
 
 The surviving distinction is therefore not “biology has branching axons.” It is narrower: **transmission matter can make an otherwise fixed edge operator depend weakly on current local traffic.** A conventional graph with activity-dependent delays remains a valid stronger attacker.
+
+
+# v3 receipt — learn a language for hidden matter
+
+v3 wraps a hidden FANMC population behind eight stimulation/recording ports. The controller sees no cell states, material variables, recurrent weights or gradients. It calibrates an external write vocabulary, waits 96 steps, then reads written state using one common probe.
+
+- full FANMC four-code accuracy: **1.0000**
+- slow-write ablation: **0.1875**
+- 48-state linear state-space attacker: **0.9792**
+- space-only FANMC: **1.0000**
+- frequency+phase only at one electrode: **0.9167**
+- frequency only at one electrode: **0.8125**
+- phase only at one electrode: **0.2708**
+- persistent FANMC write-vs-baseline distance: **0.006396**
+- fast-only write-vs-baseline distance: **2.86e-6**
+
+`PASS_BLACK_BOX_STIMULATION_LANGUAGE`
+
+This earns an interface result, not an architecture victory. Slow hidden state is necessary for persistent FANMC writes; frequency is a real one-port address coordinate in this task; but space is easier and a boring linear state-space reservoir nearly matches the full codebook.
