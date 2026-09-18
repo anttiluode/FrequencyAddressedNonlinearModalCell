@@ -85,6 +85,8 @@ class VirtualOrganoid:
         slow_decay: float = 0.9975,
         slow_write: float = 0.006,
         slow_gain: float = 1.8,
+        cell_angle_offset: float = 0.12,
+        recurrent_gain: float = 0.18,
         seed: int = 4,
     ) -> None:
         self.n_electrodes = int(n_electrodes)
@@ -92,9 +94,16 @@ class VirtualOrganoid:
         self._slow_decay = float(slow_decay)
         self._slow_write = float(slow_write)
         self._slow_gain = float(slow_gain)
+        self._cell_angle_offset = float(cell_angle_offset)
+        self._recurrent_gain = float(recurrent_gain)
 
         electrode_angle = np.linspace(0.0, 2.0 * np.pi, self.n_electrodes, endpoint=False)
-        cell_angle = np.linspace(0.12, 2.0 * np.pi + 0.12, n_cells, endpoint=False)
+        cell_angle = np.linspace(
+            self._cell_angle_offset,
+            2.0 * np.pi + self._cell_angle_offset,
+            n_cells,
+            endpoint=False,
+        )
         electrode_pos = np.column_stack([np.cos(electrode_angle), np.sin(electrode_angle)])
         cell_pos = 0.62 * np.column_stack([np.cos(cell_angle), np.sin(cell_angle)])
         d2 = np.sum((electrode_pos[:, None, :] - cell_pos[None, :, :]) ** 2, axis=2)
@@ -107,7 +116,7 @@ class VirtualOrganoid:
         recurrent *= rng.random((n_cells, n_cells)) < 0.35
         np.fill_diagonal(recurrent, 0.0)
         radius = float(np.max(np.abs(np.linalg.eigvals(recurrent))))
-        self._recurrent = 0.18 * recurrent / max(radius, 1e-12)
+        self._recurrent = self._recurrent_gain * recurrent / max(radius, 1e-12)
         self.reset()
 
     def reset(self) -> None:
