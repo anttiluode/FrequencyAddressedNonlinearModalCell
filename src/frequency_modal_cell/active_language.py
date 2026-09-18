@@ -224,7 +224,11 @@ def discover_active(
 
         score = novelty + uncertainty_weight * response_scale * uncertainty
         score[np.asarray(observed, dtype=int)] = -np.inf
-        next_index = int(np.argmax(np.round(score, 12)))
+        # Acquisition ties are scientifically equivalent here but tiny LAPACK
+        # differences can otherwise flip a discrete next-probe choice across Python
+        # versions. Quantize well below the measured response margins, then use
+        # np.argmax's stable first-index tie break.
+        next_index = int(np.argmax(np.round(score, 9)))
         observed.append(next_index)
         signatures.append(
             _response_after_write(
