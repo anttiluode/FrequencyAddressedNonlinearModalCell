@@ -304,3 +304,118 @@ So the **axon itself can become part of the address operator** without carrying 
 ### v1 claim boundary
 
 This is not a calibrated mammalian axon model. The growth law is synthetic and chemoaffinity-like; the conduction speed and ephaptic gain are dimensionless experiment parameters. The result establishes only that the proposed decomposition is executable, local, weak, geometry-dependent, and falsifiable. It does not establish that ephaptic coupling is a major source of biological computation.
+
+
+## v3 — virtual organoid interface: learn how to talk to the matter
+
+The organoid inspiration is now used as an **interface constraint**, not as a demand to simulate an organoid.
+
+Jordan et al. (2024), *Open and remotely accessible Neuroplatform for research in wetware computing* (Frontiers in Artificial Intelligence 7:1376042, doi:10.3389/frai.2024.1376042), describe the programming problem for biological neural networks as unusually awkward: internal network parameters cannot be individually written and the transfer function is unknown and non-stationary, so useful behavior has to be sought through spatiotemporal stimulation and closed-loop observation.
+
+v3 strips the biology away and keeps that computational restriction:
+
+```text
+                 HIDDEN
+        ┌──────────────────────┐
+        │ FANMC cell population│
+        │ resident cable state │
+        │ recurrent coupling   │
+        │ slow material state  │
+        └──────────────────────┘
+          ↑ ↑ ↑ ↑      ↓ ↓ ↓ ↓
+            8 virtual electrodes
+```
+
+The controller is allowed only:
+
+```text
+reset
+stimulate(electrode, frequency, phase, amplitude, duration)
+wait
+probe / record
+```
+
+It is explicitly denied the cell states, material state, recurrent matrix, electrode-to-cell map, and gradients through the internals.
+
+The first task is deliberately close to the paper's state-change demonstration but abstracted into a reusable machine-learning gate:
+
+```text
+WRITE stimulus
+      ↓
+96-step silent interval
+      ↓
+same common PROBE
+      ↓
+8-electrode Fourier response
+      ↓
+decode which state was written
+```
+
+A controller first sweeps a finite stimulation vocabulary and learns a four-symbol codebook by choosing externally observed responses that are maximally separated. The selected writes are then replayed with held-out frequency, phase and amplitude jitter plus recording noise.
+
+Three arms receive **the exact same black-box interface**:
+
+1. FANMC hidden matter with a slow material state;
+2. the same fast FANMC matter with the slow write removed;
+3. a 48-state linear state-space reservoir.
+
+That third arm is important. v3 is not allowed to claim that black-box stimulation, persistent state, or a learned codebook is uniquely biological. If an ordinary linear reservoir does the same thing, the correct conclusion is that the organoid paper helped us discover an interface discipline, not a new primitive.
+
+The scientific question is therefore:
+
+> **Can useful persistent addresses be learned from stimulation and observation alone, and which internal ingredients are actually required once the same interface is given to boring models?**
+
+This is the current implementation of the working rule:
+
+```text
+Don't train the internals directly.
+Learn a language for talking to the matter.
+```
+
+### v3 result: PASS — with two important attackers surviving
+
+Frozen receipt: [`results/v3_virtual_organoid.json`](results/v3_virtual_organoid.json)
+
+After one black-box calibration sweep over 64 candidate stimulations, the controller selects four write symbols. Each write is followed by a **96-step silent interval**, then the same common probe. Held-out trials perturb frequency by 1%, phase by 0.08 rad, amplitude by 4%, and add recording noise.
+
+| arm | four-symbol held-out accuracy |
+|---|---:|
+| full FANMC hidden matter | **100.00%** |
+| same fast matter, slow write removed | **18.75%** |
+| linear state-space reservoir, same interface | **97.92%** |
+| FANMC spatial address only | **100.00%** |
+| FANMC frequency + phase only, one electrode | **91.67%** |
+| FANMC frequency only, one electrode, fixed phase | **81.25%** |
+| FANMC phase only, one electrode, fixed frequency | **27.08%** |
+
+The full FANMC write leaves a maximum post-wait signature displacement of **0.006396** from the unwritten baseline. Removing the slow material write reduces that to **2.86e-6**, and decoding falls below the four-class chance level of 25%. So the persistent write/read part is genuinely carried by the slow hidden state in this synthetic substrate.
+
+But two stronger stories are killed immediately.
+
+First, **FANMC has not beaten ordinary reservoir memory**: the 48-state linear state-space attacker reaches 97.92% through the identical external interface.
+
+Second, **frequency is not necessary for this task**: spatial addressing alone is perfect. What frequency *does* earn is narrower and still useful: with the physical electrode fixed, four distinct frequencies alone support **81.25%** decoding after the long wait and held-out jitter, while phase alone is near chance. In this gate, frequency is therefore a real non-spatial address coordinate, not the dominant or uniquely necessary one.
+
+```text
+what survived:
+    black-box stimulation can discover a persistent external code
+    slow hidden state is necessary for the FANMC persistence
+    frequency alone can address different persistent states through one port
+
+what did not survive:
+    FANMC superiority over an ordinary state-space reservoir
+    frequency as necessary for the easiest four-symbol task
+    phase alone as a reliable four-symbol address
+```
+
+Verdict:
+
+```text
+PASS_BLACK_BOX_STIMULATION_LANGUAGE
+```
+
+The next serious gate should therefore stop asking merely whether a code exists. It should ask whether **active experiment selection can discover a useful code with fewer interventions**, and whether a learned code transfers when the hidden substrate drifts or when several writes must coexist without destroying one another.
+
+### v3 claim boundary
+
+The virtual organoid is synthetic. It does not reproduce the cellular composition, plasticity, electrophysiology, or non-stationarity of a real forebrain organoid. The slow material variable is deliberately simple and exists only to test persistent write/read behavior. The eight-electrode interface and stimulation-codebook procedure are inspired by the experimental constraint in Jordan et al.; they are not claimed as a biological model.

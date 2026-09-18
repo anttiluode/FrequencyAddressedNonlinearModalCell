@@ -1,0 +1,324 @@
+{
+  "experiment": "v3_virtual_organoid_interface",
+  "seed": 31,
+  "interface": {
+    "electrodes": 8,
+    "controller_access": [
+      "reset",
+      "stimulate(electrode, frequency, phase, amplitude, duration)",
+      "wait",
+      "probe/read"
+    ],
+    "controller_denied": [
+      "cell states",
+      "material state",
+      "recurrent matrix",
+      "electrode-to-cell map",
+      "gradients through internals"
+    ],
+    "candidate_stimulations": 64,
+    "codes_selected": 4,
+    "wait_steps": 96,
+    "probe": {
+      "electrode": 0,
+      "omega": 0.36,
+      "phase": 0.3,
+      "amplitude": 0.07,
+      "duration": 64
+    },
+    "heldout_perturbations": "1% frequency jitter, 0.08-rad phase jitter, 4% amplitude jitter, recording noise"
+  },
+  "arms": {
+    "fanmc_hidden_matter": {
+      "name": "fanmc_hidden_matter",
+      "codebook": [
+        {
+          "electrode": 0,
+          "omega": 0.3,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 4,
+          "omega": 0.54,
+          "phase": 1.570796326795,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 1,
+          "omega": 0.3,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 7,
+          "omega": 0.3,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        }
+      ],
+      "metrics": {
+        "accuracy": 1,
+        "median_classification_margin": 0.002483568741,
+        "min_calibration_pair_distance": 0.002573823659,
+        "max_write_vs_baseline_distance": 0.006395816698
+      }
+    },
+    "same_fast_matter_no_slow_write": {
+      "name": "same_fast_matter_no_slow_write",
+      "codebook": [
+        {
+          "electrode": 4,
+          "omega": 0.3,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 4,
+          "omega": 0.42,
+          "phase": 1.570796326795,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 6,
+          "omega": 0.3,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 4,
+          "omega": 0.3,
+          "phase": 1.570796326795,
+          "amplitude": 0.12,
+          "duration": 72
+        }
+      ],
+      "metrics": {
+        "accuracy": 0.1875,
+        "median_classification_margin": 3.04499e-7,
+        "min_calibration_pair_distance": 0.00000227378,
+        "max_write_vs_baseline_distance": 0.000002857821
+      }
+    },
+    "linear_state_space_reservoir": {
+      "name": "linear_state_space_reservoir",
+      "codebook": [
+        {
+          "electrode": 0,
+          "omega": 0.18,
+          "phase": 1.570796326795,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 0,
+          "omega": 0.42,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 3,
+          "omega": 0.18,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 6,
+          "omega": 0.42,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        }
+      ],
+      "metrics": {
+        "accuracy": 0.979166666667,
+        "median_classification_margin": 0.000278232357,
+        "min_calibration_pair_distance": 0.000376680871,
+        "max_write_vs_baseline_distance": 0.000561753232
+      }
+    },
+    "fanmc_spatial_only": {
+      "name": "fanmc_spatial_only",
+      "codebook": [
+        {
+          "electrode": 0,
+          "omega": 0.3,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 4,
+          "omega": 0.3,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 1,
+          "omega": 0.3,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 7,
+          "omega": 0.3,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        }
+      ],
+      "metrics": {
+        "accuracy": 1,
+        "median_classification_margin": 0.002471782075,
+        "min_calibration_pair_distance": 0.002573823659,
+        "max_write_vs_baseline_distance": 0.006395816698
+      }
+    },
+    "fanmc_frequency_phase_only": {
+      "name": "fanmc_frequency_phase_only",
+      "codebook": [
+        {
+          "electrode": 0,
+          "omega": 0.3,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 0,
+          "omega": 0.54,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 0,
+          "omega": 0.18,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 0,
+          "omega": 0.18,
+          "phase": 1.570796326795,
+          "amplitude": 0.12,
+          "duration": 72
+        }
+      ],
+      "metrics": {
+        "accuracy": 0.916666666667,
+        "median_classification_margin": 0.000582671513,
+        "min_calibration_pair_distance": 0.000493496792,
+        "max_write_vs_baseline_distance": 0.006395816698
+      }
+    },
+    "fanmc_frequency_only": {
+      "name": "fanmc_frequency_only",
+      "codebook": [
+        {
+          "electrode": 0,
+          "omega": 0.3,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 0,
+          "omega": 0.54,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 0,
+          "omega": 0.18,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 0,
+          "omega": 0.42,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        }
+      ],
+      "metrics": {
+        "accuracy": 0.8125,
+        "median_classification_margin": 0.000758225007,
+        "min_calibration_pair_distance": 0.000082859489,
+        "max_write_vs_baseline_distance": 0.006395816698
+      }
+    },
+    "fanmc_phase_only": {
+      "name": "fanmc_phase_only",
+      "codebook": [
+        {
+          "electrode": 0,
+          "omega": 0.3,
+          "phase": 0,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 0,
+          "omega": 0.3,
+          "phase": 1.570796326795,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 0,
+          "omega": 0.3,
+          "phase": 3.14159265359,
+          "amplitude": 0.12,
+          "duration": 72
+        },
+        {
+          "electrode": 0,
+          "omega": 0.3,
+          "phase": 4.712388980385,
+          "amplitude": 0.12,
+          "duration": 72
+        }
+      ],
+      "metrics": {
+        "accuracy": 0.270833333333,
+        "median_classification_margin": 0.000057226159,
+        "min_calibration_pair_distance": 0.000063656882,
+        "max_write_vs_baseline_distance": 0.006395816698
+      }
+    }
+  },
+  "gate": {
+    "fanmc_learns_four_code_black_box_vocabulary": true,
+    "write_survives_96_step_wait": true,
+    "slow_state_ablation_near_chance": true,
+    "persistent_signal_exceeds_fast_ablation_10x": true
+  },
+  "verdict": "PASS_BLACK_BOX_STIMULATION_LANGUAGE",
+  "address_ablation": {
+    "full_accuracy": 1,
+    "spatial_only_accuracy": 1,
+    "frequency_phase_only_accuracy": 0.916666666667,
+    "frequency_only_accuracy": 0.8125,
+    "phase_only_accuracy": 0.270833333333,
+    "interpretation": "These arms test whether the discovered four-symbol language actually needs frequency/phase, or whether electrode identity alone explains the result."
+  },
+  "attacker_note": "The linear state-space reservoir uses the identical black-box eight-port interface. If it matches FANMC, v3 establishes the interface and persistent-address mechanism, not a FANMC advantage. Spatial-only and frequency/phase-only candidate sets separately attack the claim that frequency is required.",
+  "claim_boundary": "This is a synthetic virtual-organoid task inspired by wetware-computing interfaces. It does not model an organoid, infer biological mechanisms, or establish that frequency-addressed matter outperforms conventional reservoirs. Internal substrate parameters are fixed; only the external stimulation codebook is learned.",
+  "source_inspiration": "Jordan et al. (2024), Open and remotely accessible Neuroplatform for research in wetware computing, Frontiers in Artificial Intelligence 7:1376042. The paper motivates programming an unknown, non-stationary biological network through spatiotemporal stimulation and closed-loop observation rather than direct weight writes."
+}
