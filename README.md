@@ -418,6 +418,78 @@ The next serious gate should therefore stop asking merely whether a code exists.
 
 
 
+
+## v5 — drift: did v4's wider code actually buy robustness?
+
+v4 left one unresolved possibility: active selection did not improve baseline decoding, but its six symbols were much farther apart in response space. v5 spends that margin under controlled substrate drift rather than lowering the original probe budget.
+
+The language is learned in the baseline material with the same **12/96** intervention budget. It is then reused without retraining after three frozen changes:
+
+- geometry: receiver/interface angular offset `0.12 -> 0.18` rad;
+- dynamics: recurrent gain `0.18 -> 0.207` (+15%);
+- combined: both changes together.
+
+Three baseline worlds are tested. Each active codebook is compared against three matched random codebooks. The code still contains six symbols and the controller still cannot inspect hidden state, coupling, or gradients.
+
+### v5 result: the wide-code hypothesis fails
+
+Frozen receipt: [`results/v5_drift.json`](results/v5_drift.json)
+
+| condition | active | random median |
+|---|---:|---:|
+| baseline | **1.000** | **1.000** |
+| geometry drift, zero-shot | 0.1667 | 0.1667 |
+| recurrent drift, zero-shot | **1.000** | **1.000** |
+| combined drift, zero-shot | 0.1667 | 0.1667 |
+| geometry, two code anchors | **1.000** | **1.000** |
+| combined, two code anchors | **1.000** | **1.000** |
+
+The extra response-space separation found in v4 therefore did **not** buy a measurable transfer advantage. Active and random languages fail and recover together.
+
+```text
+FAIL_WIDE_CODE_DRIFT_VALUE
+```
+
+### The boring attacker is more interesting: recenter the observation frame
+
+The two-anchor recovery suggested that the geometry drift might not have destroyed the code at all. It might mainly have moved the origin of the measured response space.
+
+So v5 adds a post-result attacker that is *weaker* than two-code recalibration:
+
+1. do not replay any code symbol;
+2. measure the new unwritten baseline response once;
+3. shift every stored signature by the baseline displacement;
+4. reuse all six old symbols unchanged.
+
+Write the old response to symbol (a) as
+
+```math
+s_a = b + \delta_a,
+```
+
+where (b) is the unwritten baseline and (delta_a) is the symbol-relative response. The attacker assumes only
+
+```math
+s'_a \approx b' + (s_a-b).
+```
+
+That one baseline measurement restores **1.000 median accuracy for both active and random codebooks** under geometry drift and combined geometry+dynamics drift. Recurrent-gain drift already had 1.000 zero-shot accuracy.
+
+So the useful v5 result is not “active codes are robust.” It is:
+
+> **In these synthetic drift worlds, the external language is much more stable in coordinates relative to the current unwritten baseline than in absolute response coordinates.**
+
+The apparent catastrophic loss under geometry drift—100% to chance—was largely an observer-coordinate problem. Once the measurement origin is updated, the old language works again without re-identifying the symbols.
+
+This is also a warning for future black-box matter experiments: an observer can mistake sensor-frame drift for computational rewiring if it stores absolute responses instead of relational ones.
+
+### v5 claim boundary
+
+The drift is synthetic and low-dimensional. The baseline-recentering attacker was added after the two-anchor result exposed this possibility, so it is a diagnostic attacker rather than part of the preregistered v5 pass criterion. It does not establish that real neural or wetware drift is a common translation, nor that one baseline observation will repair arbitrary non-stationarity.
+
+The next discriminating drift must therefore alter **relative code geometry**, not merely the observation origin: for example heterogeneous receiver gain changes, local route remapping, or code-specific operator drift. Only then does it make sense to ask whether wider frequency-addressed codes or active re-identification earn something.
+
+
 ## v4 — can active probing buy the stimulation language cheaply?
 
 v3 paid for an exhaustive calibration sweep. v4 freezes a stricter programming problem:
