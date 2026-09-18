@@ -20,7 +20,7 @@ def _make_bundle(seed: int = 23, separation: float = 0.06):
 
 
 def _mean_delay_shift(coupled, uncoupled):
-    return float(np.mean([uncoupled[k] - coupled[k] for k in sorted(coupled)]))
+    return float(np.round(np.mean([uncoupled[k] - coupled[k] for k in sorted(coupled)]), 12))
 
 
 def run_v1(seed: int = 23, omega: float = 0.42) -> dict:
@@ -42,7 +42,7 @@ def run_v1(seed: int = 23, omega: float = 0.42) -> dict:
     far_shift = _mean_delay_shift(far_coupled, far_uncoupled)
     staggered_shift = _mean_delay_shift(staggered_coupled, staggered_uncoupled)
     phase = arrival_phase_shift(coupled, uncoupled, omega=omega)
-    mean_phase_shift = float(np.mean(np.abs(list(phase.values()))))
+    mean_phase_shift = float(np.round(np.mean(np.abs(list(phase.values()))), 12))
     mean_delay = float(np.mean([uncoupled[k] - sync[k[0]] for k in uncoupled]))
     shift_fraction = near_shift / mean_delay
     all_target_errors = np.concatenate([a.target_errors for a in near])
@@ -66,7 +66,7 @@ def run_v1(seed: int = 23, omega: float = 0.42) -> dict:
             "targets_per_arbor": len(near[0].targets),
             "branch_counts": branch_counts,
             "segment_counts": [len(a.segments) for a in near],
-            "mean_total_length": float(np.mean([a.total_length for a in near])),
+            "mean_total_length": float(np.round(np.mean([a.total_length for a in near]), 12)),
             "max_target_error": float(np.max(all_target_errors)),
             "near_ephaptic_contacts": len(near_contacts),
             "far_ephaptic_contacts": len(far_contacts),
