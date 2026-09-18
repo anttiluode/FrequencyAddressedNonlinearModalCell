@@ -52,6 +52,13 @@ def test_v3_receipt_keeps_fanmc_and_attackers_together():
         "fanmc_hidden_matter",
         "same_fast_matter_no_slow_write",
         "linear_state_space_reservoir",
+        "fanmc_spatial_only",
+        "fanmc_frequency_phase_only",
+    }
+    assert set(receipt["address_ablation"]) >= {
+        "full_accuracy",
+        "spatial_only_accuracy",
+        "frequency_phase_only_accuracy",
     }
     assert receipt["verdict"] in {
         "PASS_BLACK_BOX_STIMULATION_LANGUAGE",
