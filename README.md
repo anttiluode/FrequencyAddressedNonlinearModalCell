@@ -177,3 +177,65 @@ This repository does **not** establish that:
 The live question is smaller:
 
 > **What is the cheapest stable dynamical object that preserves the useful computation of a richer receiving substrate?**
+
+
+## v1 — branching axonal matter and weak ephaptic timing
+
+The cell now has a second spatial scale after its local receiving dynamics:
+
+```text
+local resonant / active cell
+          ↓ emitted event train
+branching axonal arbor grown through space
+          ↓
+distant target terminals
+          +
+weak local ephaptic interaction where nearby axon segments run together
+```
+
+The axonal arbor is not an extra dense matrix. A shared growth cone advances toward the target region, then daughter branches inherit the parent direction and grow toward individual distant targets under a small chemoaffinity-like guidance rule. This intentionally rhymes with `GrowingAnttisNeuron`: **development manufactures the route before runtime uses it**.
+
+The ephaptic term is deliberately conservative. It is **not** a tiny wireless synapse. Nearby co-active, similarly oriented axon segments slightly alter one another's propagation delay. That matches the more defensible literature-scale effect: extracellular fields in axon bundles can modulate conduction timing, while ephaptic effects have also been measured/modelled near terminals. The synthetic model therefore changes arrival timing/phase only; a branch must still physically reach a target for information to be delivered.
+
+Frozen v1 receipt: [`results/v1_axonal_matter.json`](results/v1_axonal_matter.json)
+
+At seed 23:
+
+| quantity | value |
+|---|---:|
+| arbors | 3 |
+| targets per arbor | 3 |
+| segments per arbor | 47 |
+| max target error | 0 |
+| near-bundle ephaptic contacts | 1307 |
+| mean synchronous delay shift | 0.39349 step |
+| mean delay-shift fraction | **1.473%** |
+| arrival phase shift at ω=0.42 | **0.16527 rad** |
+| far-separated delay shift | 0.00530 step |
+| temporally staggered delay shift | 0.00040 step |
+
+The spatial and temporal attackers both suppress the effect by more than 98%, and turning ephaptic gain to zero reproduces the uncoupled timing exactly.
+
+Verdict:
+
+```text
+PASS_AXONAL_MATTER_GATE
+```
+
+This earns a narrow addition to the picture:
+
+```text
+frequency / phase does not only address the receiving cell.
+
+cell state → axonal event train → grown path geometry
+                                 ↓
+                     weak bundle-dependent delay
+                                 ↓
+                   changed arrival phase downstream
+```
+
+So the **axon itself can become part of the address operator** without carrying a second explicit weight matrix. The strong connection is still the branch topology. The ephaptic field is a weak contextual perturbation supplied by neighboring axonal traffic.
+
+### v1 claim boundary
+
+This is not a calibrated mammalian axon model. The growth law is synthetic and chemoaffinity-like; the conduction speed and ephaptic gain are dimensionless experiment parameters. The result establishes only that the proposed decomposition is executable, local, weak, geometry-dependent, and falsifiable. It does not establish that ephaptic coupling is a major source of biological computation.
