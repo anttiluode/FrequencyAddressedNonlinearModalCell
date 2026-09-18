@@ -53,6 +53,20 @@ def _frequency_phase_only_actions() -> list[StimulusAction]:
     ]
 
 
+def _frequency_only_actions() -> list[StimulusAction]:
+    return [
+        StimulusAction(electrode=0, omega=omega, phase=0.0, amplitude=0.12, duration=72)
+        for omega in (0.18, 0.30, 0.42, 0.54)
+    ]
+
+
+def _phase_only_actions() -> list[StimulusAction]:
+    return [
+        StimulusAction(electrode=0, omega=0.30, phase=phase, amplitude=0.12, duration=72)
+        for phase in (0.0, np.pi / 2.0, np.pi, 3.0 * np.pi / 2.0)
+    ]
+
+
 def _run_arm(name: str, matter, candidates, *, wait_steps: int, probe: StimulusAction, seed: int) -> dict:
     codebook = learn_stimulation_codebook(
         matter,
@@ -113,13 +127,29 @@ def run_v3(seed: int = 31, wait_steps: int = 96) -> dict:
         probe=probe,
         seed=seed + 3,
     )
-    frequency_only = _run_arm(
+    frequency_phase_only = _run_arm(
         "fanmc_frequency_phase_only",
         VirtualOrganoid(seed=4),
         _frequency_phase_only_actions(),
         wait_steps=wait_steps,
         probe=probe,
         seed=seed + 4,
+    )
+    frequency_only = _run_arm(
+        "fanmc_frequency_only",
+        VirtualOrganoid(seed=4),
+        _frequency_only_actions(),
+        wait_steps=wait_steps,
+        probe=probe,
+        seed=seed + 5,
+    )
+    phase_only = _run_arm(
+        "fanmc_phase_only",
+        VirtualOrganoid(seed=4),
+        _phase_only_actions(),
+        wait_steps=wait_steps,
+        probe=probe,
+        seed=seed + 6,
     )
 
     fanmc_acc = fanmc["metrics"]["accuracy"]
@@ -164,14 +194,18 @@ def run_v3(seed: int = 31, wait_steps: int = 96) -> dict:
             "same_fast_matter_no_slow_write": fast,
             "linear_state_space_reservoir": linear,
             "fanmc_spatial_only": spatial_only,
-            "fanmc_frequency_phase_only": frequency_only,
+            "fanmc_frequency_phase_only": frequency_phase_only,
+            "fanmc_frequency_only": frequency_only,
+            "fanmc_phase_only": phase_only,
         },
         "gate": gate,
         "verdict": "PASS_BLACK_BOX_STIMULATION_LANGUAGE" if all(gate.values()) else "FAIL_BLACK_BOX_STIMULATION_LANGUAGE",
         "address_ablation": {
             "full_accuracy": fanmc["metrics"]["accuracy"],
             "spatial_only_accuracy": spatial_only["metrics"]["accuracy"],
-            "frequency_phase_only_accuracy": frequency_only["metrics"]["accuracy"],
+            "frequency_phase_only_accuracy": frequency_phase_only["metrics"]["accuracy"],
+            "frequency_only_accuracy": frequency_only["metrics"]["accuracy"],
+            "phase_only_accuracy": phase_only["metrics"]["accuracy"],
             "interpretation": (
                 "These arms test whether the discovered four-symbol language actually needs frequency/phase, "
                 "or whether electrode identity alone explains the result."
