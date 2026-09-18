@@ -1,0 +1,431 @@
+{
+  "experiment": "v5_drifting_stimulation_language",
+  "world_seeds": [
+    4,
+    9,
+    14
+  ],
+  "baseline_probe_budget": 12,
+  "random_repeats_per_world": 3,
+  "code_symbols": 6,
+  "recalibration_interventions": 2,
+  "drift_specs": [
+    {
+      "name": "geometry",
+      "cell_angle_offset": 0.18,
+      "recurrent_gain": 0.18
+    },
+    {
+      "name": "dynamics",
+      "cell_angle_offset": 0.12,
+      "recurrent_gain": 0.207
+    },
+    {
+      "name": "combined",
+      "cell_angle_offset": 0.18,
+      "recurrent_gain": 0.207
+    }
+  ],
+  "worlds": [
+    {
+      "world_seed": 4,
+      "baseline": {
+        "active_accuracy": 1,
+        "random_accuracy_median": 1,
+        "active_min_pair_distance": 0.001105857149,
+        "random_min_pair_distance_median": 0.000366726097
+      },
+      "drifts": {
+        "geometry": {
+          "parameters": {
+            "cell_angle_offset": 0.18,
+            "recurrent_gain": 0.18
+          },
+          "active_zero_shot": {
+            "accuracy": 0.166666666667,
+            "median_margin": 0.000392359962
+          },
+          "random_zero_shot_accuracy_median": 0.166666666667,
+          "active_baseline_recenter": {
+            "accuracy": 1,
+            "median_margin": 0.000981660395
+          },
+          "random_baseline_recenter_accuracy_median": 1,
+          "baseline_recenter": {
+            "baseline_probe_interventions": 1,
+            "offset_norm": 0.004950575943
+          },
+          "active_two_anchor": {
+            "accuracy": 1,
+            "median_margin": 0.001016571096
+          },
+          "random_two_anchor_accuracy_median": 0.944444444444,
+          "active_recalibration": {
+            "anchor_indices": [
+              0,
+              1
+            ],
+            "baseline_recenter_probes": 1,
+            "recalibration_interventions": 2,
+            "global_scale": 0.977810185707,
+            "offset_norm": 0.009726537069
+          }
+        },
+        "dynamics": {
+          "parameters": {
+            "cell_angle_offset": 0.12,
+            "recurrent_gain": 0.207
+          },
+          "active_zero_shot": {
+            "accuracy": 1,
+            "median_margin": 0.000670534305
+          },
+          "random_zero_shot_accuracy_median": 0.833333333333,
+          "active_baseline_recenter": {
+            "accuracy": 1,
+            "median_margin": 0.001100742254
+          },
+          "random_baseline_recenter_accuracy_median": 1,
+          "baseline_recenter": {
+            "baseline_probe_interventions": 1,
+            "offset_norm": 0.00088776099
+          },
+          "active_two_anchor": {
+            "accuracy": 1,
+            "median_margin": 0.00097583672
+          },
+          "random_two_anchor_accuracy_median": 1,
+          "active_recalibration": {
+            "anchor_indices": [
+              0,
+              1
+            ],
+            "baseline_recenter_probes": 1,
+            "recalibration_interventions": 2,
+            "global_scale": 0.996917219252,
+            "offset_norm": 0.001017164979
+          }
+        },
+        "combined": {
+          "parameters": {
+            "cell_angle_offset": 0.18,
+            "recurrent_gain": 0.207
+          },
+          "active_zero_shot": {
+            "accuracy": 0.166666666667,
+            "median_margin": 0.000412352548
+          },
+          "random_zero_shot_accuracy_median": 0.166666666667,
+          "active_baseline_recenter": {
+            "accuracy": 1,
+            "median_margin": 0.000995871914
+          },
+          "random_baseline_recenter_accuracy_median": 1,
+          "baseline_recenter": {
+            "baseline_probe_interventions": 1,
+            "offset_norm": 0.004695563309
+          },
+          "active_two_anchor": {
+            "accuracy": 1,
+            "median_margin": 0.000997527009
+          },
+          "random_two_anchor_accuracy_median": 1,
+          "active_recalibration": {
+            "anchor_indices": [
+              0,
+              1
+            ],
+            "baseline_recenter_probes": 1,
+            "recalibration_interventions": 2,
+            "global_scale": 0.975136090187,
+            "offset_norm": 0.010107444742
+          }
+        }
+      }
+    },
+    {
+      "world_seed": 9,
+      "baseline": {
+        "active_accuracy": 1,
+        "random_accuracy_median": 1,
+        "active_min_pair_distance": 0.00103119301,
+        "random_min_pair_distance_median": 0.000627609715
+      },
+      "drifts": {
+        "geometry": {
+          "parameters": {
+            "cell_angle_offset": 0.18,
+            "recurrent_gain": 0.18
+          },
+          "active_zero_shot": {
+            "accuracy": 0.166666666667,
+            "median_margin": 0.000474334523
+          },
+          "random_zero_shot_accuracy_median": 0.166666666667,
+          "active_baseline_recenter": {
+            "accuracy": 1,
+            "median_margin": 0.000947018042
+          },
+          "random_baseline_recenter_accuracy_median": 1,
+          "baseline_recenter": {
+            "baseline_probe_interventions": 1,
+            "offset_norm": 0.004846014241
+          },
+          "active_two_anchor": {
+            "accuracy": 1,
+            "median_margin": 0.00099453855
+          },
+          "random_two_anchor_accuracy_median": 1,
+          "active_recalibration": {
+            "anchor_indices": [
+              0,
+              1
+            ],
+            "baseline_recenter_probes": 1,
+            "recalibration_interventions": 2,
+            "global_scale": 0.990491277048,
+            "offset_norm": 0.006736463434
+          }
+        },
+        "dynamics": {
+          "parameters": {
+            "cell_angle_offset": 0.12,
+            "recurrent_gain": 0.207
+          },
+          "active_zero_shot": {
+            "accuracy": 1,
+            "median_margin": 0.000687130538
+          },
+          "random_zero_shot_accuracy_median": 1,
+          "active_baseline_recenter": {
+            "accuracy": 1,
+            "median_margin": 0.000948849204
+          },
+          "random_baseline_recenter_accuracy_median": 1,
+          "baseline_recenter": {
+            "baseline_probe_interventions": 1,
+            "offset_norm": 0.000588816638
+          },
+          "active_two_anchor": {
+            "accuracy": 1,
+            "median_margin": 0.00094376059
+          },
+          "random_two_anchor_accuracy_median": 1,
+          "active_recalibration": {
+            "anchor_indices": [
+              0,
+              1
+            ],
+            "baseline_recenter_probes": 1,
+            "recalibration_interventions": 2,
+            "global_scale": 0.996418127104,
+            "offset_norm": 0.001166839047
+          }
+        },
+        "combined": {
+          "parameters": {
+            "cell_angle_offset": 0.18,
+            "recurrent_gain": 0.207
+          },
+          "active_zero_shot": {
+            "accuracy": 0.166666666667,
+            "median_margin": 0.000379522323
+          },
+          "random_zero_shot_accuracy_median": 0.166666666667,
+          "active_baseline_recenter": {
+            "accuracy": 1,
+            "median_margin": 0.000972549296
+          },
+          "random_baseline_recenter_accuracy_median": 1,
+          "baseline_recenter": {
+            "baseline_probe_interventions": 1,
+            "offset_norm": 0.004963424968
+          },
+          "active_two_anchor": {
+            "accuracy": 1,
+            "median_margin": 0.001108618205
+          },
+          "random_two_anchor_accuracy_median": 1,
+          "active_recalibration": {
+            "anchor_indices": [
+              0,
+              1
+            ],
+            "baseline_recenter_probes": 1,
+            "recalibration_interventions": 2,
+            "global_scale": 0.982723720905,
+            "offset_norm": 0.008582964176
+          }
+        }
+      }
+    },
+    {
+      "world_seed": 14,
+      "baseline": {
+        "active_accuracy": 1,
+        "random_accuracy_median": 1,
+        "active_min_pair_distance": 0.001039782773,
+        "random_min_pair_distance_median": 0.000881925837
+      },
+      "drifts": {
+        "geometry": {
+          "parameters": {
+            "cell_angle_offset": 0.18,
+            "recurrent_gain": 0.18
+          },
+          "active_zero_shot": {
+            "accuracy": 0.166666666667,
+            "median_margin": 0.000483502265
+          },
+          "random_zero_shot_accuracy_median": 0.166666666667,
+          "active_baseline_recenter": {
+            "accuracy": 1,
+            "median_margin": 0.000981587102
+          },
+          "random_baseline_recenter_accuracy_median": 1,
+          "baseline_recenter": {
+            "baseline_probe_interventions": 1,
+            "offset_norm": 0.004928897066
+          },
+          "active_two_anchor": {
+            "accuracy": 1,
+            "median_margin": 0.000922310121
+          },
+          "random_two_anchor_accuracy_median": 1,
+          "active_recalibration": {
+            "anchor_indices": [
+              0,
+              1
+            ],
+            "baseline_recenter_probes": 1,
+            "recalibration_interventions": 2,
+            "global_scale": 0.984533318018,
+            "offset_norm": 0.008146603993
+          }
+        },
+        "dynamics": {
+          "parameters": {
+            "cell_angle_offset": 0.12,
+            "recurrent_gain": 0.207
+          },
+          "active_zero_shot": {
+            "accuracy": 1,
+            "median_margin": 0.000365145865
+          },
+          "random_zero_shot_accuracy_median": 1,
+          "active_baseline_recenter": {
+            "accuracy": 1,
+            "median_margin": 0.000988029493
+          },
+          "random_baseline_recenter_accuracy_median": 1,
+          "baseline_recenter": {
+            "baseline_probe_interventions": 1,
+            "offset_norm": 0.001505112926
+          },
+          "active_two_anchor": {
+            "accuracy": 0.944444444444,
+            "median_margin": 0.000972630494
+          },
+          "random_two_anchor_accuracy_median": 1,
+          "active_recalibration": {
+            "anchor_indices": [
+              0,
+              1
+            ],
+            "baseline_recenter_probes": 1,
+            "recalibration_interventions": 2,
+            "global_scale": 0.998641742809,
+            "offset_norm": 0.001626664283
+          }
+        },
+        "combined": {
+          "parameters": {
+            "cell_angle_offset": 0.18,
+            "recurrent_gain": 0.207
+          },
+          "active_zero_shot": {
+            "accuracy": 0.166666666667,
+            "median_margin": 0.000539056771
+          },
+          "random_zero_shot_accuracy_median": 0.166666666667,
+          "active_baseline_recenter": {
+            "accuracy": 1,
+            "median_margin": 0.00114290581
+          },
+          "random_baseline_recenter_accuracy_median": 1,
+          "baseline_recenter": {
+            "baseline_probe_interventions": 1,
+            "offset_norm": 0.005226611021
+          },
+          "active_two_anchor": {
+            "accuracy": 1,
+            "median_margin": 0.000905786607
+          },
+          "random_two_anchor_accuracy_median": 1,
+          "active_recalibration": {
+            "anchor_indices": [
+              0,
+              1
+            ],
+            "baseline_recenter_probes": 1,
+            "recalibration_interventions": 2,
+            "global_scale": 0.988659821606,
+            "offset_norm": 0.007522082921
+          }
+        }
+      }
+    }
+  ],
+  "scenario_summary": {
+    "geometry": {
+      "active_zero_shot_median": 0.166666666667,
+      "random_zero_shot_median": 0.166666666667,
+      "active_baseline_recenter_median": 1,
+      "random_baseline_recenter_median": 1,
+      "active_two_anchor_median": 1,
+      "random_two_anchor_median": 1,
+      "active_zero_shot_world_wins": 0,
+      "active_two_anchor_world_wins": 1
+    },
+    "dynamics": {
+      "active_zero_shot_median": 1,
+      "random_zero_shot_median": 1,
+      "active_baseline_recenter_median": 1,
+      "random_baseline_recenter_median": 1,
+      "active_two_anchor_median": 1,
+      "random_two_anchor_median": 1,
+      "active_zero_shot_world_wins": 1,
+      "active_two_anchor_world_wins": 0
+    },
+    "combined": {
+      "active_zero_shot_median": 0.166666666667,
+      "random_zero_shot_median": 0.166666666667,
+      "active_baseline_recenter_median": 1,
+      "random_baseline_recenter_median": 1,
+      "active_two_anchor_median": 1,
+      "random_two_anchor_median": 1,
+      "active_zero_shot_world_wins": 0,
+      "active_two_anchor_world_wins": 0
+    }
+  },
+  "summary": {
+    "active_zero_shot_median": 0.166666666667,
+    "random_zero_shot_median": 0.166666666667,
+    "active_baseline_recenter_median": 1,
+    "random_baseline_recenter_median": 1,
+    "active_two_anchor_median": 1,
+    "random_two_anchor_median": 1,
+    "baseline_active_accuracy_median": 1,
+    "baseline_random_accuracy_median": 1
+  },
+  "gate": {
+    "baseline_both_at_least_0_95": true,
+    "two_anchor_cost_less_than_full_codebook": true,
+    "active_recalibrated_accuracy_at_least_0_75": true,
+    "active_zero_shot_beats_random_by_0_10": false,
+    "active_two_anchor_beats_random_by_0_10": false
+  },
+  "margin_earned": false,
+  "verdict": "FAIL_WIDE_CODE_DRIFT_VALUE",
+  "claim_boundary": "The drift axes are synthetic and frozen before the v5 outcome: a 0.06-rad cell/electrode geometry shift, a 15% recurrent-gain increase, and their combination. Baseline recentering is a post-result attacker that measures only the new unwritten response origin. Two-anchor recalibration fits only one global scalar gain plus one response-space offset vector. This tests whether v4's larger code margin has transfer value; it does not model biological homeostasis or continual learning."
+}
