@@ -1,0 +1,35 @@
+{
+  "experiment": "v1_branching_axonal_matter",
+  "seed": 23,
+  "geometry": {
+    "arbors": 3,
+    "targets_per_arbor": 3,
+    "branch_counts": [1, 1, 1],
+    "segment_counts": [47, 47, 47],
+    "mean_total_length": 2.5169866808984414,
+    "max_target_error": 0.0,
+    "near_ephaptic_contacts": 1307,
+    "far_ephaptic_contacts": 50
+  },
+  "ephaptic": {
+    "model": "weak geometry- and coactivity-dependent conduction-delay perturbation",
+    "gain": 0.006,
+    "near_sync_mean_delay_shift": 0.39349342362299805,
+    "far_sync_mean_delay_shift": 0.005300065332416498,
+    "near_staggered_mean_delay_shift": 0.0004034367012448254,
+    "near_sync_delay_shift_fraction": 0.014730915936274552,
+    "carrier_omega_rad_per_step": 0.42,
+    "mean_absolute_arrival_phase_shift_rad": 0.16526723792165918
+  },
+  "gate": {
+    "all_targets_reached": true,
+    "all_arbors_branch": true,
+    "near_sync_ephaptic_effect_nonzero": true,
+    "weak_not_hidden_wire": true,
+    "spatial_control_suppresses_80pct": true,
+    "temporal_control_suppresses_80pct": true,
+    "zero_gain_exactly_uncoupled": true
+  },
+  "verdict": "PASS_AXONAL_MATTER_GATE",
+  "claim_boundary": "This is a synthetic axonal-matter gate. Branch growth is chemoaffinity-like and ephaptic coupling is modeled only as a weak local timing perturbation between nearby co-active segments. It does not claim calibrated mammalian conduction velocities, field amplitudes, or that ephaptic coupling is a major source of neural computation."
+}
