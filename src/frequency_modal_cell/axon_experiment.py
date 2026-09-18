@@ -44,7 +44,7 @@ def run_v1(seed: int = 23, omega: float = 0.42) -> dict:
     phase = arrival_phase_shift(coupled, uncoupled, omega=omega)
     mean_phase_shift = float(np.round(np.mean(np.abs(list(phase.values()))), 12))
     mean_delay = float(np.mean([uncoupled[k] - sync[k[0]] for k in uncoupled]))
-    shift_fraction = near_shift / mean_delay
+    shift_fraction = float(np.round(near_shift / mean_delay, 12))
     all_target_errors = np.concatenate([a.target_errors for a in near])
     branch_counts = [a.branch_count for a in near]
 
