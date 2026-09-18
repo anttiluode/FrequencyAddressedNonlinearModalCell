@@ -45,26 +45,14 @@ def test_codebook_learning_uses_same_interface_for_boring_reservoir():
     assert 0.0 <= result["accuracy"] <= 1.0
 
 
-def test_v3_receipt_keeps_fanmc_and_attackers_together():
-    receipt = run_v3(seed=31, wait_steps=96)
-    assert receipt["interface"]["electrodes"] == 8
-    assert set(receipt["arms"]) == {
-        "fanmc_hidden_matter",
-        "same_fast_matter_no_slow_write",
-        "linear_state_space_reservoir",
-        "fanmc_spatial_only",
-        "fanmc_frequency_phase_only",
-        "fanmc_frequency_only",
-        "fanmc_phase_only",
-    }
-    assert set(receipt["address_ablation"]) >= {
-        "full_accuracy",
-        "spatial_only_accuracy",
-        "frequency_phase_only_accuracy",
-        "frequency_only_accuracy",
-        "phase_only_accuracy",
-    }
-    assert receipt["verdict"] in {
-        "PASS_BLACK_BOX_STIMULATION_LANGUAGE",
-        "FAIL_BLACK_BOX_STIMULATION_LANGUAGE",
-    }
+def test_frequency_and_phase_can_be_presented_through_same_black_box_interface():
+    matter = VirtualOrganoid(n_cells=4, cell_compartments=6, seed=5)
+    probe = StimulusAction(electrode=0, omega=0.31, phase=0.1, amplitude=0.05, duration=24)
+    candidates = [
+        StimulusAction(electrode=0, omega=omega, phase=phase, amplitude=0.10, duration=28)
+        for omega, phase in ((0.18, 0.0), (0.30, 0.0), (0.42, 0.0), (0.30, np.pi / 2.0))
+    ]
+    codebook = learn_stimulation_codebook(matter, candidates, wait_steps=20, probe=probe, codes=3)
+    assert len(codebook.actions) == 3
+    assert all(action.electrode == 0 for action in codebook.actions)
+    assert len({(round(action.omega, 6), round(action.phase, 6)) for action in codebook.actions}) == 3
