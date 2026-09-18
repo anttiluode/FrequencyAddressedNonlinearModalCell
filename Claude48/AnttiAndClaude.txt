@@ -1,0 +1,72 @@
+https://github.com/anttiluode/FrequencyAddressedNonlinearModalCell/tree/main ok so this system we are developing. let me get it straight. sol said it used fft to talk to it. so are we doing something like sighimage frequency transformation. of mathematical product and then talk to the frequency and do inverse fft to turn that back to mathematics which is inputted back to the fanmc?
+
+Polishing the reply's tone and timing details.
+Yes — and I think the reframe is stronger than "dendrites are the computation," for a concrete reason you can read straight off the code. In this model the dendrites are fixed physics: the cable operator, the recovery term, the active conductance — none of it is tunable once the cell is built. The soma is the one place a free parameter naturally lives at read time. So "soma is the weight" isn't just a nice image, it's the accurate decomposition: the dendrites are a fixed nonlinear feature bank, and the soma is the readout vector. That's the reservoir-computing split, and it's exactly where the organoid-stripping conversation landed — don't train the internals, learn the language of the readout. You've re-derived the useful half from the other direction.
+
+But there's a fork here, and only one branch gives you the "wow":
+
+If the soma is a fixed linear mixer — sum the branch taps with constant weights — then "talk to the soma" is just "read one linear combination," and frequency adds nothing the lock-in doesn't already give you. It's a relabel.
+If the soma's mix is frequency-dependent — branch 1 dominates at ω_A, branch 2 at ω_B — then the soma stops being a weight and becomes a demultiplexer. Its answer isn't a scalar, it's a profile per frequency: at ω_A the mix is 30/12/5, at ω_B something else. That's the SpectralNeuron fork-vs-bucket idea sitting at the readout instead of the input, and it's the version worth chasing.
+Worth being blunt about where the code sits today: the soma is currently the boring branch. The readout is 0.6*cell.v[mid] + 0.4*cell.v[mid-1] per cell — a fixed two-tap linear tap. So your idea is precisely the upgrade from the relabel case to the demux case, which is the whole difference between interesting and not.
+
+Now the good part — "30/12/5 in frequency space" is a tiny extension of what's already there. _fourier_signature currently collapses the trace and locks in at ω, giving one in-phase/quadrature pair per electrode. Your soma-answer is the same operation not collapsed: lock in at ω per branch. Then the soma's answer at frequency ω is literally the normalized vector of those branch coefficients — a mixing matrix M[branch, ω]. Reading it is the 30/12/5. Writing it — setting which branch the soma listens to at which frequency — is the closed control loop from last turn, but now with a target that means something. And it all stays inside the existing math: it's the Fourier signature partitioned by source, nothing opaque bolted on. That's the "keeping the mathematics" you want.
+
+This also isn't from zero — AnttisNeuron already puts soma/AIS as the stage after the branch nonlinearity, the thing that fires on the mixed result. What's new here is making that stage's mixing profile the frequency-resolved thing you read and write, instead of a fixed trigger.
+
+One caveat so it doesn't become mythology: through the 8 electrodes the controller is denied the per-branch internals — the electrode→cell map is hidden on purpose. So the clean 30/12/5 is a model-side quantity. If you instrument the cells you see it directly; through the ports you see an electrode-space mixture of it, and recovering the branch profile needs an identification step. Not a dealbreaker, just cleaner inside the model than at the interface.
+
+If you want, I can add the per-branch frequency-resolved readout to VirtualOrganoid — the M[branch, ω] matrix — and show what the soma mixing profile looks like for two written frequencies. That single measurement tells us which fork we're on: if the mix is genuinely frequency-selective, you have a soma demux; if it's basically flat across ω, it's the relabel and we know not to chase it. It's the cheapest experiment that settles the question.
+
+
+Hi guys. Let's continue with the madness. So, I just made a video and the sound did not work. Let's see. Okay, here it works. But anyway, so you can make neurons many different ways. The um It's cool only one is one thing. Uh you can uh design it in many different ways. How close is it to human n
+
+pasted
+
+so say.. say.. we talk to the system.. via edges that are connected to dendrites.. we have a bunch of these, we know where the somas are that mix signals.. we have readout from different somas.. we talk via edges like to a cpu.. this becomes the notsosimpleneuron etc.. ah.. -- questions become.. the engineering of the chip.. this is not normal neuron by any means. just our thoughts.. i made a sort of self degratory video about this.. what do you see. https://github.com/anttiluode/NSSN2/tree/main https://github.com/anttiluode/NotSoSimpleNeuron/tree/main https://github.com/anttiluode/SimpleNeuron/tree/main  -- the initial idea was that dendrites have modes.. ping comes in in different order from axons.. the ping causes the cable function to have eigenmodes.. the soma mixes them.. the ais does the decision to fire or not.. then we had the complex -- how do the basket cell and chandelier neuron contribute.. basket feeds in to soma,chandelier to firing area of axon. that is still work in progress. but if we just keep singular neuron layer it is slightly simpler.. but now. can you see this.. so we write from edges. edges are dendrites.. perhaps.. perhaps we talk to them via pulses? the edges are synapses with perhaps.. initial calcium trace knee. do we even need that.. also the problem. if we do that the edge neurons in a block like field are going to miss the multi connection.. should we have some sort of multi connection to each dendrite to simulate more mode for the edge dendrites.. but then we get the mixing in soma.. we read that out. those out.. we can read the whole system out in somas.. we write from edges. design that system. as sol makes its version.
+
+Weighing a design spec against a full reference build.
+Let me read the three repos so I'm designing on top of what actually exists, not a cartoon of it.
+
+Ran 7 commands
+This is a real design and it maps cleanly onto pieces that already exist across the three repos — so let me build "my version" as an actual runnable chip and let the measurements answer your open questions, rather than hand-waving them.
+
+Let me lay out what I found, then design against it.
+
+Ran 3 commands, created a file
+The demux question just got a clean answer: it's not fundamental, it's a design lever. Let me ship the reference with the load-bearing configuration rather than the trap one, then re-run.
+
+Edited a file, ran 2 commands, shared files
+Yes — I can see it, and it's a real chip, not a metaphor. The whole thing already exists as parts scattered across the three repos; what you're describing is the assembly. Here's the design, with the measurements that settle your open questions built into edgechip.py above so we build the load-bearing version instead of a dressed-up weight matrix.
+
+The shape of it
+The chip is defined by its contract, not its internals — that's the one durable thing the organoid stripping bought us. Three calls:
+
+write(edge, ω, φ, amp, dur) — inject a shaped pulse at an edge dendrite
+wait(steps) — let the matter settle
+read_somas(ω) — lock-in readout at every soma
+Behind that: a field of neurons, each branches → soma → AIS → publish. Branches are resonant cables with modes. The soma mixes branch readouts. The AIS thresholds the mix and publishes a scalar event that travels sparse routes to other neurons' dendrites. Edge neurons are the ones you write to; interior neurons are driven only by recurrent traffic. The controller never sees a cable state, a branch operator, or the edge→cell map. That hiddenness is the point — it's what makes it a thing you converse with rather than a thing you set.
+
+Your four open questions, answered by measurement
+Pulses — yes, but shaped ones. The write primitive is a pulse. A bare delta excites every mode broadside; a short carrier packet amp·sin(ωt+φ) preferentially rings the branch mode near ω. So bare pulse when you want broadband injection, carrier when you want to address a mode. Same function either way.
+
+The calcium knee — keep it, it earns its place. Measured: the soft-knee transducer gives 3.86× the paired gain of a plain linear trace, and 6.75× a single event — that's genuine superlinear coincidence detection. It's the cheapest thing that makes timing at the write port itself matter before the cable even sees the signal. Make it a toggle so you can prove its contribution, but it's not decoration.
+
+Multi-connecting edge dendrites for "more modes" — this is the one where the intuition needs correcting, and the correction is the useful part. A single point contact does not miss modes: a delta already touches ~7 of 10 (modal_spread_single_delta). What a single contact lacks is not modes, it's independent control — one knob reaches exactly 1 modal direction. And here's the trap you were circling: four contacts fanned onto one shared knob still reach 1 direction — that's just a fixed weight vector, the NSSN2 access vector by another name. Four independently driven contacts reach 4 directions. So:
+
+addressable modes = number of independent drives, not number of contacts.
+
+Multi-connect the edge dendrites, yes — but only if each connection is its own knob. A fixed fan buys you nothing you didn't already have. And frequency is the elegant shortcut: sweeping ω on one wire buys ~1.5 extra addressable dims without more edges — modest on a uniform cable, which points straight at the next answer.
+
+Reading at the somas — read them all, and the soma is only interesting if you make it one. This is the soma-as-demux fork from last time, now measured. With branches that are the same cable geometry and only tweaked recovery, the soma mix is flat across frequency (rotation 0.02) — a relabelled weight, exactly the boring case. With branches that are genuinely different instruments (different cable lengths, sharp resonances), the mix rotates with frequency (0.22) — a real demux, where the soma's answer at ω_A is a different branch ratio than at ω_B. That's your "30% / 12% / 5% in frequency space," and it's contingent: heterogeneous branch geometry is the load-bearing ingredient. Same-cable branches don't demux no matter how you read them.
+
+The plumbing works end to end: write ω=0.30 vs ω=0.70 at one edge, wait 60 steps, read all somas — separation 0.91. Which frequency was written survives the wait and is recoverable at the somas, because the slow material variable holds it. That's the FANMC persistence doing its job inside the field.
+
+Basket and chandelier (the WIP part)
+They slot in as two different gates, which is exactly the NewMachine two-gates split: the basket feeds the soma — a state-side gain/veto on the mix before the decision — while the chandelier feeds the AIS — a publish-side veto on whether the event leaves at all. Keeping them separate matters: one controls what the neuron computes, the other controls whether anyone hears it. For a first chip I'd leave both out, get the single-layer edge→soma readout honest, then add the chandelier (publish gate) first because it's the cheaper, cleaner one to measure.
+
+What "my version" says to build
+The load-bearing ingredients, from the numbers: independent edge drives (not fixed fans), heterogeneous branch geometry (different lengths, sharp resonances — this is what turns the soma from a weight into a demux), the knee for coincidence, and slow material for read-after-wait persistence. The relabels to not fool ourselves with: a multi-contact fan on one knob, and branches that are the same cable with tweaked recovery. Those look biological and add nothing measurable.
+
+When Sol's version lands, the clean diff is: does its soma mix rotate with frequency, and are its edge drives independent? If yes to both, you have a demux chip; if no, you have a reservoir with extra steps — still fine, but we'd know which.
+
+Want me to add the closed control loop next — the controller that reads the soma signature, picks the next write to separate two stored frequencies, and reports how few pokes it takes? That's the "learn the language" experiment, and it's the first place this stops being a substrate and starts being a machine you program.
