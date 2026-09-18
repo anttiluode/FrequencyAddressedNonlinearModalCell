@@ -34,3 +34,14 @@ The first axonal-matter gate adds three grown branching arbors, each reaching th
 `PASS_AXONAL_MATTER_GATE`
 
 The useful distinction is now: **branch topology carries the strong route; local axonal field interactions weakly modulate when that route delivers its event.**
+
+
+# v2 receipt — branching collapses to a graph; runtime axonal context does not
+
+A sparse fixed-delay graph with one edge per terminal reproduces the uncoupled grown arbor with **zero arrival-time error**. This kills any claim that frozen branching geometry alone earns a new computational primitive.
+
+When weak ephaptic timing is enabled for nearby synchronous axons, the fixed-delay attacker misses arrival times by **0.40235 step RMS**, or **0.16899 rad RMS** at the test carrier. Spatial separation reduces the mismatch to **0.00801** and temporal staggering to **0.00044**.
+
+`PASS_FIXED_DELAY_BOUNDARY`
+
+The surviving distinction is therefore not “biology has branching axons.” It is narrower: **transmission matter can make an otherwise fixed edge operator depend weakly on current local traffic.** A conventional graph with activity-dependent delays remains a valid stronger attacker.
