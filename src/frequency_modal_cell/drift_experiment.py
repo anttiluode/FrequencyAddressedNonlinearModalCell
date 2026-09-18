@@ -87,6 +87,40 @@ def fit_two_anchor_alignment(
     return scale, offset
 
 
+def recenter_from_unwritten_baseline(
+    codebook: LearnedCodebook,
+    matter: VirtualOrganoid,
+    *,
+    wait_steps: int,
+    probe: StimulusAction,
+    noise: float,
+    seed: int,
+) -> tuple[LearnedCodebook, dict]:
+    """Attacker: treat drift as a changed observation origin, not a changed language."""
+    rng = np.random.default_rng(seed)
+    new_baseline = _response_after_write(
+        matter,
+        None,
+        wait_steps=wait_steps,
+        probe=probe,
+        observation_noise=noise,
+        rng=rng,
+    )
+    offset = new_baseline - codebook.baseline_signature
+    return (
+        LearnedCodebook(
+            actions=codebook.actions,
+            signatures=codebook.signatures + offset,
+            baseline_signature=new_baseline,
+            candidate_count=codebook.candidate_count,
+        ),
+        {
+            "baseline_probe_interventions": 1,
+            "offset_norm": float(np.round(np.linalg.norm(offset), 12)),
+        },
+    )
+
+
 def recalibrate_two_anchors(
     codebook: LearnedCodebook,
     matter: VirtualOrganoid,
@@ -123,7 +157,8 @@ def recalibrate_two_anchors(
         ),
         {
             "anchor_indices": list(anchors),
-            "recalibration_interventions": 2,
+            "baseline_recenter_probes": 1,
+        "recalibration_interventions": 2,
             "global_scale": float(np.round(scale, 12)),
             "offset_norm": float(np.round(np.linalg.norm(offset), 12)),
         },
@@ -236,6 +271,41 @@ def _world(
             for r, book in enumerate(random_books)
         ]
 
+        active_recenter, active_recenter_info = recenter_from_unwritten_baseline(
+            active,
+            make_matter(seed, spec),
+            wait_steps=wait_steps,
+            probe=probe,
+            noise=1e-4,
+            seed=33500 + 101 * seed + d,
+        )
+        active_recenter_metrics = _eval(
+            make_matter(seed, spec),
+            active_recenter,
+            wait_steps=wait_steps,
+            probe=probe,
+            seed=33700 + 101 * seed + d,
+        )
+        random_recenter_metrics = []
+        for r, book in enumerate(random_books):
+            recentered, _ = recenter_from_unwritten_baseline(
+                book,
+                make_matter(seed, spec),
+                wait_steps=wait_steps,
+                probe=probe,
+                noise=1e-4,
+                seed=33800 + 101 * seed + 11 * d + r,
+            )
+            random_recenter_metrics.append(
+                _eval(
+                    make_matter(seed, spec),
+                    recentered,
+                    wait_steps=wait_steps,
+                    probe=probe,
+                    seed=33900 + 101 * seed + 11 * d + r,
+                )
+            )
+
         active_recal, active_info = recalibrate_two_anchors(
             active,
             make_matter(seed, spec),
@@ -281,6 +351,11 @@ def _world(
             "random_zero_shot_accuracy_median": float(
                 np.round(np.median([m["accuracy"] for m in zero_random]), 12)
             ),
+            "active_baseline_recenter": active_recenter_metrics,
+            "random_baseline_recenter_accuracy_median": float(
+                np.round(np.median([m["accuracy"] for m in random_recenter_metrics]), 12)
+            ),
+            "baseline_recenter": active_recenter_info,
             "active_two_anchor": active_recal_metrics,
             "random_two_anchor_accuracy_median": float(
                 np.round(np.median([m["accuracy"] for m in random_recal_metrics]), 12)
@@ -345,6 +420,8 @@ def run_v5(
     scenario_summary = {}
     active_zero_all = []
     random_zero_all = []
+    active_recenter_all = []
+    random_recenter_all = []
     active_recal_all = []
     random_recal_all = []
     for spec in drift_specs():
@@ -354,6 +431,12 @@ def run_v5(
         random_zero = np.asarray(
             [w["drifts"][spec.name]["random_zero_shot_accuracy_median"] for w in worlds]
         )
+        active_recenter = np.asarray(
+            [w["drifts"][spec.name]["active_baseline_recenter"]["accuracy"] for w in worlds]
+        )
+        random_recenter = np.asarray(
+            [w["drifts"][spec.name]["random_baseline_recenter_accuracy_median"] for w in worlds]
+        )
         active_recal = np.asarray(
             [w["drifts"][spec.name]["active_two_anchor"]["accuracy"] for w in worlds]
         )
@@ -362,11 +445,15 @@ def run_v5(
         )
         active_zero_all.extend(active_zero.tolist())
         random_zero_all.extend(random_zero.tolist())
+        active_recenter_all.extend(active_recenter.tolist())
+        random_recenter_all.extend(random_recenter.tolist())
         active_recal_all.extend(active_recal.tolist())
         random_recal_all.extend(random_recal.tolist())
         scenario_summary[spec.name] = {
             "active_zero_shot_median": float(np.round(np.median(active_zero), 12)),
             "random_zero_shot_median": float(np.round(np.median(random_zero), 12)),
+            "active_baseline_recenter_median": float(np.round(np.median(active_recenter), 12)),
+            "random_baseline_recenter_median": float(np.round(np.median(random_recenter), 12)),
             "active_two_anchor_median": float(np.round(np.median(active_recal), 12)),
             "random_two_anchor_median": float(np.round(np.median(random_recal), 12)),
             "active_zero_shot_world_wins": int(np.sum(active_zero > random_zero)),
@@ -376,6 +463,8 @@ def run_v5(
     summary = {
         "active_zero_shot_median": float(np.round(np.median(active_zero_all), 12)),
         "random_zero_shot_median": float(np.round(np.median(random_zero_all), 12)),
+        "active_baseline_recenter_median": float(np.round(np.median(active_recenter_all), 12)),
+        "random_baseline_recenter_median": float(np.round(np.median(random_recenter_all), 12)),
         "active_two_anchor_median": float(np.round(np.median(active_recal_all), 12)),
         "random_two_anchor_median": float(np.round(np.median(random_recal_all), 12)),
         "baseline_active_accuracy_median": float(
@@ -442,7 +531,8 @@ def run_v5(
         "verdict": verdict,
         "claim_boundary": (
             "The drift axes are synthetic and frozen before the v5 outcome: a 0.06-rad cell/electrode geometry "
-            "shift, a 15% recurrent-gain increase, and their combination. Two-anchor recalibration fits only one "
+            "shift, a 15% recurrent-gain increase, and their combination. Baseline recentering is a post-result "
+            "attacker that measures only the new unwritten response origin. Two-anchor recalibration fits only one "
             "global scalar gain plus one response-space offset vector. This tests whether v4's larger code margin "
             "has transfer value; it does not model biological homeostasis or continual learning."
         ),
