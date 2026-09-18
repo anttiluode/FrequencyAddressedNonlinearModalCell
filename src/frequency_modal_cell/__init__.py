@@ -2,6 +2,7 @@
 
 from .axon import AxonArbor, AxonSegment, ephaptic_contacts, grow_branching_arbor, terminal_arrival_times
 from .core import ResonantActiveCable, ReducedModel, carrier_packet, fit_reduced_model, rollout_reduced
+from .active_language import BudgetedDiscovery, discover_active, discover_geometry_cover, discover_random
 from .virtual_organoid import (
     LearnedCodebook,
     LinearPortReservoir,
@@ -12,6 +13,10 @@ from .virtual_organoid import (
 )
 
 __all__ = [
+    "BudgetedDiscovery",
+    "discover_active",
+    "discover_geometry_cover",
+    "discover_random",
     "AxonArbor",
     "AxonSegment",
     "ephaptic_contacts",

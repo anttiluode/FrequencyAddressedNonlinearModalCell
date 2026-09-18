@@ -1,0 +1,450 @@
+{
+  "experiment": "v4_budgeted_stimulation_language",
+  "candidate_count": 96,
+  "code_symbols": 6,
+  "probe_budget": 12,
+  "budget_fraction": 0.125,
+  "random_repeats_per_world": 5,
+  "world_seeds": [
+    4,
+    9,
+    14
+  ],
+  "controller_access": "stimulation coordinates plus signatures of interventions actually purchased",
+  "controller_denied": "unqueried responses, hidden cell/material/connectivity state, and gradients through matter",
+  "worlds": [
+    {
+      "world_seed": 4,
+      "active": {
+        "probed_indices": [
+          4,
+          23,
+          35,
+          47,
+          53,
+          64,
+          77,
+          1,
+          89,
+          12,
+          10,
+          25
+        ],
+        "metrics": {
+          "accuracy": 1,
+          "min_pair_distance": 0.001105857149,
+          "median_margin": 0.001030521598
+        }
+      },
+      "geometry_cover": {
+        "probed_indices": [
+          4,
+          23,
+          35,
+          47,
+          59,
+          71,
+          83,
+          95,
+          13,
+          25,
+          37,
+          49
+        ],
+        "metrics": {
+          "accuracy": 1,
+          "min_pair_distance": 0.000378506333,
+          "median_margin": 0.000344943107
+        }
+      },
+      "exhaustive_oracle": {
+        "probe_count": 96,
+        "metrics": {
+          "accuracy": 1,
+          "min_pair_distance": 0.001465248076,
+          "median_margin": 0.001460169717
+        }
+      },
+      "random": {
+        "repeats": 5,
+        "probe_sets": [
+          [
+            57,
+            48,
+            67,
+            61,
+            79,
+            16,
+            73,
+            51,
+            18,
+            92,
+            81,
+            2
+          ],
+          [
+            8,
+            39,
+            69,
+            16,
+            82,
+            23,
+            78,
+            88,
+            48,
+            70,
+            21,
+            90
+          ],
+          [
+            76,
+            38,
+            43,
+            10,
+            51,
+            78,
+            86,
+            90,
+            65,
+            62,
+            41,
+            22
+          ],
+          [
+            69,
+            65,
+            42,
+            95,
+            48,
+            71,
+            76,
+            45,
+            38,
+            19,
+            4,
+            43
+          ],
+          [
+            1,
+            17,
+            67,
+            68,
+            83,
+            38,
+            48,
+            18,
+            92,
+            47,
+            41,
+            51
+          ]
+        ],
+        "accuracy_median": 1,
+        "min_pair_distance_median": 0.000482918318,
+        "accuracy_all": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "world_seed": 9,
+      "active": {
+        "probed_indices": [
+          4,
+          23,
+          35,
+          47,
+          53,
+          64,
+          77,
+          1,
+          89,
+          12,
+          10,
+          25
+        ],
+        "metrics": {
+          "accuracy": 1,
+          "min_pair_distance": 0.00103119301,
+          "median_margin": 0.000988134029
+        }
+      },
+      "geometry_cover": {
+        "probed_indices": [
+          4,
+          23,
+          35,
+          47,
+          59,
+          71,
+          83,
+          95,
+          13,
+          25,
+          37,
+          49
+        ],
+        "metrics": {
+          "accuracy": 1,
+          "min_pair_distance": 0.000387418329,
+          "median_margin": 0.000342600221
+        }
+      },
+      "exhaustive_oracle": {
+        "probe_count": 96,
+        "metrics": {
+          "accuracy": 1,
+          "min_pair_distance": 0.001471368268,
+          "median_margin": 0.001451366329
+        }
+      },
+      "random": {
+        "repeats": 5,
+        "probe_sets": [
+          [
+            16,
+            41,
+            25,
+            11,
+            15,
+            24,
+            27,
+            23,
+            51,
+            79,
+            33,
+            95
+          ],
+          [
+            10,
+            2,
+            85,
+            30,
+            75,
+            48,
+            35,
+            46,
+            81,
+            34,
+            72,
+            51
+          ],
+          [
+            16,
+            36,
+            39,
+            85,
+            21,
+            95,
+            2,
+            42,
+            68,
+            9,
+            34,
+            64
+          ],
+          [
+            88,
+            69,
+            90,
+            95,
+            75,
+            46,
+            68,
+            78,
+            54,
+            72,
+            11,
+            86
+          ],
+          [
+            5,
+            56,
+            50,
+            14,
+            39,
+            82,
+            45,
+            87,
+            31,
+            0,
+            33,
+            74
+          ]
+        ],
+        "accuracy_median": 1,
+        "min_pair_distance_median": 0.000739818333,
+        "accuracy_all": [
+          1,
+          1,
+          1,
+          0.916666666667,
+          1
+        ]
+      }
+    },
+    {
+      "world_seed": 14,
+      "active": {
+        "probed_indices": [
+          4,
+          23,
+          35,
+          47,
+          53,
+          64,
+          77,
+          1,
+          89,
+          12,
+          10,
+          25
+        ],
+        "metrics": {
+          "accuracy": 1,
+          "min_pair_distance": 0.001039782773,
+          "median_margin": 0.001138567813
+        }
+      },
+      "geometry_cover": {
+        "probed_indices": [
+          4,
+          23,
+          35,
+          47,
+          59,
+          71,
+          83,
+          95,
+          13,
+          25,
+          37,
+          49
+        ],
+        "metrics": {
+          "accuracy": 1,
+          "min_pair_distance": 0.000396325223,
+          "median_margin": 0.000394931716
+        }
+      },
+      "exhaustive_oracle": {
+        "probe_count": 96,
+        "metrics": {
+          "accuracy": 1,
+          "min_pair_distance": 0.001463196412,
+          "median_margin": 0.001405430197
+        }
+      },
+      "random": {
+        "repeats": 5,
+        "probe_sets": [
+          [
+            40,
+            39,
+            88,
+            81,
+            47,
+            17,
+            45,
+            9,
+            33,
+            74,
+            78,
+            43
+          ],
+          [
+            47,
+            93,
+            76,
+            72,
+            84,
+            21,
+            58,
+            33,
+            38,
+            43,
+            81,
+            30
+          ],
+          [
+            4,
+            8,
+            31,
+            81,
+            51,
+            9,
+            43,
+            42,
+            20,
+            78,
+            22,
+            30
+          ],
+          [
+            59,
+            47,
+            7,
+            67,
+            71,
+            32,
+            62,
+            82,
+            25,
+            3,
+            12,
+            11
+          ],
+          [
+            71,
+            90,
+            73,
+            34,
+            37,
+            66,
+            69,
+            59,
+            12,
+            67,
+            70,
+            85
+          ]
+        ],
+        "accuracy_median": 1,
+        "min_pair_distance_median": 0.000446905311,
+        "accuracy_all": [
+          1,
+          1,
+          1,
+          0.916666666667,
+          1
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "active_accuracy_median": 1,
+    "geometry_accuracy_median": 1,
+    "random_accuracy_median": 1,
+    "oracle_accuracy_median": 1,
+    "active_min_pair_distance_median": 0.001039782773,
+    "geometry_min_pair_distance_median": 0.000387418329,
+    "random_min_pair_distance_median": 0.000482918318,
+    "active_world_wins_vs_random_median": 0
+  },
+  "base_gate": {
+    "probe_budget_at_most_one_eighth_of_exhaustive": true,
+    "active_accuracy_at_least_0_75": true,
+    "active_beats_random_accuracy_by_0_05": false,
+    "active_wins_at_least_two_of_three_worlds": false,
+    "active_within_0_10_of_exhaustive_oracle": true,
+    "active_pair_distance_at_least_1_10x_random": true
+  },
+  "adaptive_specific": true,
+  "geometry_beats_random": false,
+  "verdict": "FAIL_BUDGETED_LANGUAGE_DISCOVERY",
+  "claim_boundary": "The active selector uses an ordinary ridge response surrogate over visible stimulation coordinates. Any advantage establishes probe efficiency only in this synthetic family. If the fixed geometry-cover attacker matches it, response adaptation has not earned a distinct claim."
+}

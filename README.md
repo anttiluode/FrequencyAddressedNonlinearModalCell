@@ -416,6 +416,62 @@ PASS_BLACK_BOX_STIMULATION_LANGUAGE
 
 The next serious gate should therefore stop asking merely whether a code exists. It should ask whether **active experiment selection can discover a useful code with fewer interventions**, and whether a learned code transfers when the hidden substrate drifts or when several writes must coexist without destroying one another.
 
+
+
+## v4 — can active probing buy the stimulation language cheaply?
+
+v3 paid for an exhaustive calibration sweep. v4 freezes a stricter programming problem:
+
+```text
+96 possible writes
+12 purchased interventions
+6 code symbols to discover
+3 hidden FANMC worlds
+```
+
+The response-adaptive controller starts with four geometry-covering probes. After that it fits a small ridge surrogate from **only the responses it has actually purchased**, then chooses each next stimulus by predicted response novelty plus surrogate uncertainty. It never sees unqueried signatures or hidden substrate state.
+
+Two matched attackers run beside it:
+
+- random stimulation selection at the same 12-probe budget, five repeats per hidden world;
+- a fixed farthest-point design in visible stimulus coordinates that never adapts to measured responses.
+
+The exhaustive 96-probe codebook remains an oracle ceiling.
+
+### v4 result: FAIL on the preregistered active-vs-random accuracy claim
+
+Frozen receipt: [`results/v4_budgeted_language.json`](results/v4_budgeted_language.json)
+
+All four strategies saturate six-symbol held-out decoding:
+
+| strategy | median accuracy |
+|---|---:|
+| response-adaptive, 12 probes | **1.000** |
+| fixed stimulus-space cover, 12 probes | **1.000** |
+| random, 12 probes | **1.000** |
+| exhaustive oracle, 96 probes | **1.000** |
+
+Therefore the frozen requirement that active probing beat random accuracy by at least 0.05 fails, as does the requirement to win at least two of three hidden worlds. The task is simply too easy at this budget, so v4 does **not** establish that an adaptive controller needs fewer interventions.
+
+There is nevertheless one useful residue. The codebooks found by active probing are substantially more separated in the measured response space:
+
+| strategy | median minimum pair distance |
+|---|---:|
+| response-adaptive | **0.001040** |
+| random | 0.000483 |
+| fixed geometry cover | 0.000387 |
+| exhaustive oracle | about 0.00147 |
+
+So the active code has about **2.15x** the minimum separation of the median random code while using one eighth of the exhaustive probe count. That was not enough to improve accuracy under the current noise/jitter regime, and it is not promoted to a win.
+
+Verdict:
+
+```text
+FAIL_BUDGETED_LANGUAGE_DISCOVERY
+```
+
+The next gate follows from the failed one rather than retuning it: **make the hidden substrate drift** and ask whether the larger response margin buys robustness or cheaper re-identification. If it does not, the separation itself was decorative.
+
 ### v3 claim boundary
 
 The virtual organoid is synthetic. It does not reproduce the cellular composition, plasticity, electrophysiology, or non-stationarity of a real forebrain organoid. The slow material variable is deliberately simple and exists only to test persistent write/read behavior. The eight-electrode interface and stimulation-codebook procedure are inspired by the experimental constraint in Jordan et al.; they are not claimed as a biological model.
