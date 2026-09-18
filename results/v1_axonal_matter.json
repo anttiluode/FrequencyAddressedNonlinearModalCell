@@ -4,9 +4,17 @@
   "geometry": {
     "arbors": 3,
     "targets_per_arbor": 3,
-    "branch_counts": [1, 1, 1],
-    "segment_counts": [47, 47, 47],
-    "mean_total_length": 2.5169866808984414,
+    "branch_counts": [
+      1,
+      1,
+      1
+    ],
+    "segment_counts": [
+      47,
+      47,
+      47
+    ],
+    "mean_total_length": 2.516986680898,
     "max_target_error": 0.0,
     "near_ephaptic_contacts": 1307,
     "far_ephaptic_contacts": 50
@@ -14,12 +22,12 @@
   "ephaptic": {
     "model": "weak geometry- and coactivity-dependent conduction-delay perturbation",
     "gain": 0.006,
-    "near_sync_mean_delay_shift": 0.39349342362299805,
-    "far_sync_mean_delay_shift": 0.005300065332416498,
-    "near_staggered_mean_delay_shift": 0.0004034367012448254,
-    "near_sync_delay_shift_fraction": 0.014730915936274552,
+    "near_sync_mean_delay_shift": 0.393493423623,
+    "far_sync_mean_delay_shift": 0.005300065332,
+    "near_staggered_mean_delay_shift": 0.000403436701,
+    "near_sync_delay_shift_fraction": 0.014730915936,
     "carrier_omega_rad_per_step": 0.42,
-    "mean_absolute_arrival_phase_shift_rad": 0.16526723792165918
+    "mean_absolute_arrival_phase_shift_rad": 0.165267237922
   },
   "gate": {
     "all_targets_reached": true,
