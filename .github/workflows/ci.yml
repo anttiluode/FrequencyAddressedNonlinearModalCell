@@ -20,3 +20,5 @@ jobs:
       - run: python -m frequency_modal_cell.experiment --output results/ci-v0.json
       - run: python -m frequency_modal_cell.axon_experiment --output results/ci-v1.json
       - run: diff -u results/v1_axonal_matter.json results/ci-v1.json
+      - run: python -m frequency_modal_cell.axon_attacker_experiment --output results/ci-v2.json
+      - run: diff -u results/v2_fixed_delay_attacker.json results/ci-v2.json

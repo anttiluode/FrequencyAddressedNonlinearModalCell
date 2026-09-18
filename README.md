@@ -21,6 +21,71 @@ Earlier projects already established several boundaries:
 
 This repo reverses the old field-computing direction. Instead of inventing a field and asking what it computes, it starts with richer computational matter and asks what **small field/operator description can be extracted without losing the computation**.
 
+
+## How this differs from ordinary neuron models
+
+The unusual claim here is **not** merely that biology has dendrites and axons. Detailed compartmental models already know that. The difference is where the computation is allowed to live.
+
+| ordinary abstraction | this repository's working abstraction |
+|---|---|
+| artificial neuron: `y = sigma(w^T x + b)` | arriving carrier perturbs a resident state-dependent receiver |
+| spiking neuron: integrate current, threshold, emit spike | local state/history changes the operator encountered by the next event |
+| connection = scalar weight or fixed kernel | effective connection can factor into receiver state, carrier, grown path and delay |
+| axon = ideal wire or fixed delay | grown axonal geometry is an output delay/routing operator |
+| network topology is specified directly | development can manufacture the topology before runtime uses it |
+| coupling is explicit synaptic connectivity | weak local ephaptic timing can depend on nearby axonal traffic |
+
+A useful shorthand is:
+
+```text
+normal neural abstraction:
+    computation in node + communication in edge
+
+this project:
+    receiving matter computes
+            +
+    grown transmission matter transforms
+            +
+    the effective connection is assembled at runtime
+```
+
+That does **not** mean the physical description automatically earns a better computational primitive. A conventional model is the default attacker. In particular, a frozen branching axon should collapse to a sparse graph with fixed delays. The next gate below tests exactly that boundary.
+
+### v2 — normal-model attacker: sparse graph + fixed delays
+
+The first deliberately boring attacker removes the spatial axon after development and replaces every grown terminal route with one graph edge carrying the measured path delay.
+
+If the axon has no runtime state, the two descriptions should be equivalent:
+
+```text
+grown branch geometry  ->  path length / speed
+                         ↓
+                  fixed graph delay
+```
+
+The only residue allowed to survive is **context-dependent timing**: in v1, nearby co-active axons slightly change one another's propagation delay. If the fixed-delay graph matches that too, then the ephaptic story has added no computational consequence.
+
+This is intentionally a reduction test, not a performance benchmark. Even if fixed delays fail under ephaptic coupling, a richer conventional graph with activity-dependent delays could emulate the effect. The question is simply **which pieces of the physical story survive abstraction**.
+
+Frozen v2 receipt: [`results/v2_fixed_delay_attacker.json`](results/v2_fixed_delay_attacker.json)
+
+| attacker test | error |
+|---|---:|
+| frozen graph vs uncoupled grown arbor | **0.000000** max arrival error |
+| frozen graph vs near synchronous ephaptic bundle | **0.40235** step RMS |
+| same mismatch expressed as phase at ω=0.42 | **0.16899 rad RMS** |
+| far-separated axons | **0.00801** step RMS |
+| nearby but temporally staggered axons | **0.00044** step RMS |
+
+Verdict:
+
+```text
+PASS_FIXED_DELAY_BOUNDARY
+```
+
+The result deliberately kills part of the stronger story. **A frozen branching axon is computationally equivalent, for arrival timing, to a sparse graph with fixed edge delays.** The physical arbor becomes interesting only when some property of the transmitting matter remains runtime-dependent. In the current synthetic model that residue is the weak local coactivity-dependent timing perturbation. A conventional network with activity-dependent delays could represent that too, so v2 establishes a decomposition boundary rather than irreducibility.
+
+
 ## v0 — compress a resonant + active receiver
 
 The teacher is deliberately synthetic and transparent. It combines two mechanisms already isolated in `NotSoSimpleNeuron`:
