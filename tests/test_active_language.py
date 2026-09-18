@@ -10,7 +10,7 @@ from frequency_modal_cell.virtual_organoid import StimulusAction, VirtualOrganoi
 
 def _small_candidates():
     return [
-        StimulusAction(electrode=e, omega=w, phase=p, amplitude=0.09, duration=20)
+        StimulusAction(electrode=e, omega=w, phase=p, amplitude=0.045, duration=16)
         for e in range(4)
         for w in (0.20, 0.36, 0.52)
         for p in (0.0, np.pi / 2.0)
@@ -34,11 +34,11 @@ def test_geometry_cover_spends_exact_unique_budget():
 
 def test_active_discovery_never_exceeds_purchased_probes():
     candidates = _small_candidates()
-    probe = StimulusAction(electrode=0, omega=0.31, phase=0.2, amplitude=0.05, duration=20)
+    probe = StimulusAction(electrode=0, omega=0.31, phase=0.2, amplitude=0.035, duration=16)
     discovery = discover_active(
-        VirtualOrganoid(n_cells=3, n_electrodes=8, cell_compartments=5, seed=2),
+        VirtualOrganoid(seed=2),
         candidates,
-        wait_steps=12,
+        wait_steps=8,
         probe=probe,
         budget=7,
         codes=3,
